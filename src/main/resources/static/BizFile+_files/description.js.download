@@ -1,0 +1,8 @@
+function showDiv(divTag, id) {
+  var i;
+  for (i = 1; i < 6; i++) {
+    var tempDiv = divTag + i;
+    document.getElementById(tempDiv).style.display = 'none';
+  }
+  document.getElementById(divTag+id).style.display = 'block';
+}

@@ -1,0 +1,3246 @@
+isShift = false
+
+var oldShareValue;
+
+function oldShareValue(evt) {
+    var source = evt.getSource();
+    var _keyCode = evt.getKeyCode();
+    var clientId = source.getClientId();
+    var unitposition;
+    var shareStr1;
+    var shareStr2;
+    clientId = clientId + '::content';
+    var shareField = document.getElementById(clientId);
+    var shareNo = shareField.value;
+    var resultV;
+    var regex = new RegExp("^(\\d{0,19}(\\.\\d{0,19})?|\\d{0,19})$");
+    //Backspace, Right and Left Arrow
+    if (_keyCode == 8 || _keyCode == 37 || _keyCode == 39) {
+        return true;
+    }
+    //For Decimal
+    if (_keyCode == 110 || _keyCode == 190) {
+        if (shareNo != null) {
+            unitposition = document.getElementById(evt.getSource().getClientId() + "::content").selectionStart;
+            console.log(unitposition);
+            shareStr1 = shareNo.substr(0, unitposition);
+            shareStr2 = shareNo.substr(unitposition);
+            shareNo = shareStr1 + String.fromCharCode(46) + shareStr2;
+        }
+        else {
+            shareNo = String.fromCharCode(46);
+        }
+
+        //console.log("Part 1 :::" + shareNo);
+        resultV = regex.test(shareNo);
+        if (resultV) {
+            //console.log(resultV);
+            return true;
+        }
+        else {
+            //console.log("Else");
+            evt.cancel();
+        }
+    }
+    else {
+        if (_keyCode == 16) {
+            isShift = true;
+        }
+        if (isShift == true || ((_keyCode == 32) || (_keyCode > 64 && _keyCode < 91) || (_keyCode > 105 && _keyCode < 112) || (_keyCode > 185 && _keyCode < 193) || (_keyCode > 218 && _keyCode < 223))) {
+            //console.log("Not Valid");
+            evt.cancel();
+            return false;
+        }
+        if (shareNo != null) {
+            unitposition = document.getElementById(evt.getSource().getClientId() + "::content").selectionStart;
+            //console.log(unitposition);
+            shareStr1 = shareNo.substr(0, unitposition);
+            shareStr2 = shareNo.substr(unitposition);
+            shareNo = shareStr1 + String.fromCharCode((96 <= _keyCode && _keyCode <= 105) ? _keyCode - 48 : _keyCode) + shareStr2;
+        }
+        else
+            shareNo = String.fromCharCode((96 <= _keyCode && _keyCode <= 105) ? _keyCode - 48 : _keyCode);
+
+        //console.log("Part 2 ::: "+shareNo);
+        resultV = regex.test(shareNo);
+        if (resultV) {
+            //console.log(resultV);
+            return true;
+        }
+        else {
+            //console.log("Else "+resultV);
+            evt.cancel();
+        }
+    }
+}
+
+function validateShareValue(evt) {
+    return true;
+}
+
+//To validate share fields for 19,19
+/*
+function validateShareValue(evt){
+       var source = evt.getSource();
+       var _keyCode = evt.getKeyCode();
+       var clientId = source.getClientId();
+       clientId = clientId + '::content';
+       var shareField = document.getElementById(clientId);
+       var shareNo = shareField.value;
+       var resultV;
+       var regex = new RegExp("^(\\d{0,19}(\\.\\d{0,19})?|\\d{0,19})$");
+       //Backspace, Right and Left Arrow
+       if(_keyCode == 8 || _keyCode == 37 || _keyCode == 39){
+            return true;
+       }
+       //For Decimal
+       if(_keyCode == 110 || _keyCode == 190){
+			if(shareNo!=null){
+		   shareNo = shareNo+String.fromCharCode(46);
+		   }
+		   else{
+		   shareNo =String.fromCharCode(46);
+		   }
+
+		//console.log(shareNo);
+        resultV=regex.test(shareNo);
+
+			if(resultV) {
+				//console.log(resultV);
+				return true;
+			} else{
+			 //console.log("Else "+resultV);
+			 evt.cancel();
+		   }
+       }else{
+        if (_keyCode == 16){
+            isShift = true;
+        }
+        if (isShift == true || ((_keyCode==32) || (_keyCode > 64 && _keyCode < 91) || (_keyCode > 105 && _keyCode < 112) || (_keyCode > 185 && _keyCode < 193) || (_keyCode > 218 && _keyCode < 223) )) {
+            //console.log("Not Valid");
+            evt.cancel();
+            return false;
+        }
+
+        if(shareNo!=null)
+			shareNo = shareNo+String.fromCharCode((96 <= _keyCode && _keyCode <= 105)? _keyCode-48 : _keyCode);
+        else
+			shareNo =String.fromCharCode((96 <= _keyCode && _keyCode <= 105)? _keyCode-48 : _keyCode);
+
+	   //console.log(shareNo);
+       resultV=regex.test(shareNo);
+                   if(resultV) {
+		   //console.log(resultV);
+		   return true;
+		   } else{
+			 //console.log("Else "+resultV);
+			 evt.cancel();
+		   }
+       }
+    }
+*/
+function clearMessagesForComponent(evt) {
+    AdfPage.PAGE.clearAllMessages();
+    evt.cancel();
+}
+
+function cleardatemsg(evt) {
+
+    var comp = evt.getSource();
+
+    AdfPage.PAGE.clearMessages(comp.getClientId());
+}
+
+function setNaemFocus(evt) {
+    var source = evt.getSource();
+    var dateId = source.getProperty("focusField1");
+    var id = source.findComponent(dateId).getValue();
+    var field = source.getProperty("focusField");
+    if (id == "1") {
+        source.findComponent(field).focus();
+    }
+}
+
+function characterCounter1(evt) {
+    var source = evt.getSource();
+    var outField1 = source.getProperty("outField");
+    var maxlimit = parseInt(source.getProperty("maxLength"), 10);
+    var outputLabelForMsg = source.findComponent(outField1);
+    if (source.getValue() != 'null') {
+        //alert('Characters Left :'+ (maxlimit - (source.getSubmittedValue().length)))
+        if (source.getSubmittedValue().length > maxlimit) {
+            alert('cross max limit')
+            source.setValue(source.getSubmittedValue().substring(0, maxlimit));
+        }
+        else {
+            outputLabelForMsg.setValue((maxlimit - (source.getSubmittedValue().length)));
+        }
+        AdfPage.PAGE.addPartialTrigger(source);
+        AdfPage.PAGE.addPartialTrigger(outputLabelForMsg);
+    }
+}
+
+function validateDateFormatFaStartDate(evt) {
+    //var dateExp = /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/;
+    //var dateExp =/^[0,1]?\d{1}\/((\d?\d{1})|([3][0,1]{1}))\/(([1]{1}[9]{1}[9]{1}\d{1})|([2-9]{1}\d{3}))$/;
+    //  var dateExp=/ ^(\d{2}((0[1-9]|1[012])(0[1-9]|1\d|2[0-8])|(0[123456789]|1[012])(29|30)|(0[13578]|1[02])31)|([02468][048]|[13579][26])0229)$/;
+    var dateExp = /^(((0[1-9]|[12]\d|3[01])\/(0[13578]|1[02])\/((19|[2-9]\d)\d{2}))|((0[1-9]|[12]\d|30)\/(0[13456789]|1[012])\/((19|[2-9]\d)\d{2}))|((0[1-9]|1\d|2[0-8])\/02\/((19|[2-9]\d)\d{2}))|(29\/02\/((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$/;
+    var source = evt.getSource();
+    var dateId = source.getProperty("dateField");
+    var id = source.findComponent(dateId);
+    var field = source.getProperty("fieldName");
+    var msgId = source.getProperty("dateMsgField");
+    var msg = source.findComponent(msgId);
+    console.log("dateExp " + dateExp);
+    console.log("Injtia date valid: " + id.getSubmittedValue());
+    if (id.getSubmittedValue() != "" && !(id.getSubmittedValue().match(dateExp))) {
+        console.log("date value: " + id.getSubmittedValue());
+        console.log("Message Id" + msgId);
+        evt.cancel();
+        msg.setMessage("Please enter a valid Permission to act from start date.");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+    else if (!validateDateValues(id)) {
+        evt.cancel();
+        msg.setMessage("Please enter a valid Permission to act from start date.");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+    else if (id.getSubmittedValue() == "") {
+        console.log("Message Id" + msgId);
+        console.log("date value is enmpty: " + id.getSubmittedValue());
+
+    }
+    console.log("reaching");
+    msg.setMessage("");
+    AdfPage.PAGE.addPartialTrigger(msg);
+    //        else{
+    //           msg.setMessage(null);
+    //            AdfPage.PAGE.addPartialTrigger(msg);
+    //        }
+}
+
+function validateDateFormatFaEndDate(evt) {
+    //var dateExp = /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/;
+    //var dateExp =/^[0,1]?\d{1}\/((\d?\d{1})|([3][0,1]{1}))\/(([1]{1}[9]{1}[9]{1}\d{1})|([2-9]{1}\d{3}))$/;
+    //  var dateExp=/ ^(\d{2}((0[1-9]|1[012])(0[1-9]|1\d|2[0-8])|(0[123456789]|1[012])(29|30)|(0[13578]|1[02])31)|([02468][048]|[13579][26])0229)$/;
+    var dateExp = /^(((0[1-9]|[12]\d|3[01])\/(0[13578]|1[02])\/((19|[2-9]\d)\d{2}))|((0[1-9]|[12]\d|30)\/(0[13456789]|1[012])\/((19|[2-9]\d)\d{2}))|((0[1-9]|1\d|2[0-8])\/02\/((19|[2-9]\d)\d{2}))|(29\/02\/((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$/;
+    var source = evt.getSource();
+    var dateId = source.getProperty("dateField");
+    var id = source.findComponent(dateId);
+    var field = source.getProperty("fieldName");
+    var msgId = source.getProperty("dateMsgField");
+    var msg = source.findComponent(msgId);
+    console.log("dateExp " + dateExp);
+    console.log("Injtia date valid: " + id.getSubmittedValue());
+    if (id.getSubmittedValue() != "" && !(id.getSubmittedValue().match(dateExp))) {
+        console.log("date value: " + id.getSubmittedValue());
+        console.log("Message Id" + msgId);
+        evt.cancel();
+        msg.setMessage("Please enter a valid end date.");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+    else if (!validateDateValues(id)) {
+        evt.cancel();
+        msg.setMessage("Please enter a valid end date.");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+    else if (id.getSubmittedValue() == "") {
+        console.log("Message Id" + msgId);
+        console.log("date value is enmpty: " + id.getSubmittedValue());
+
+    }
+    console.log("reaching");
+    msg.setMessage("");
+    AdfPage.PAGE.addPartialTrigger(msg);
+    //        else{
+    //           msg.setMessage(null);
+    //            AdfPage.PAGE.addPartialTrigger(msg);
+    //        }
+}
+
+function validateDateFormatQiDOBDate(evt) {
+    //var dateExp = /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/;
+    //var dateExp =/^[0,1]?\d{1}\/((\d?\d{1})|([3][0,1]{1}))\/(([1]{1}[9]{1}[9]{1}\d{1})|([2-9]{1}\d{3}))$/;
+    //  var dateExp=/ ^(\d{2}((0[1-9]|1[012])(0[1-9]|1\d|2[0-8])|(0[123456789]|1[012])(29|30)|(0[13578]|1[02])31)|([02468][048]|[13579][26])0229)$/;
+    var dateExp = /^(((0[1-9]|[12]\d|3[01])\/(0[13578]|1[02])\/((19|[2-9]\d)\d{2}))|((0[1-9]|[12]\d|30)\/(0[13456789]|1[012])\/((19|[2-9]\d)\d{2}))|((0[1-9]|1\d|2[0-8])\/02\/((19|[2-9]\d)\d{2}))|(29\/02\/((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$/;
+    var source = evt.getSource();
+    var dateId = source.getProperty("dateField");
+    var id = source.findComponent(dateId);
+    var field = source.getProperty("fieldName");
+    var msgId = source.getProperty("dateMsgField");
+    var msg = source.findComponent(msgId);
+    console.log("dateExp " + dateExp);
+    console.log("Injtia date valid: " + id.getSubmittedValue());
+    if (id.getSubmittedValue() != "" && !(id.getSubmittedValue().match(dateExp))) {
+        console.log("date value: " + id.getSubmittedValue());
+        console.log("Message Id" + msgId);
+        evt.cancel();
+        msg.setMessage("Please enter a valid Date of Birth.");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+    else if (!validateDateValues(id)) {
+        evt.cancel();
+        msg.setMessage("Please enter a valid Date of Birth.");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+    else if (id.getSubmittedValue() == "") {
+        console.log("Message Id" + msgId);
+        console.log("date value is enmpty: " + id.getSubmittedValue());
+
+    }
+    console.log("reaching");
+    msg.setMessage("");
+    AdfPage.PAGE.addPartialTrigger(msg);
+    //        else{
+    //           msg.setMessage(null);
+    //            AdfPage.PAGE.addPartialTrigger(msg);
+    //        }
+}
+
+function validateDateFormat(evt) {
+    //var dateExp = /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/;
+    //var dateExp =/^[0,1]?\d{1}\/((\d?\d{1})|([3][0,1]{1}))\/(([1]{1}[9]{1}[9]{1}\d{1})|([2-9]{1}\d{3}))$/;
+    //  var dateExp=/ ^(\d{2}((0[1-9]|1[012])(0[1-9]|1\d|2[0-8])|(0[123456789]|1[012])(29|30)|(0[13578]|1[02])31)|([02468][048]|[13579][26])0229)$/;
+    var dateExp = /^(((0[1-9]|[12]\d|3[01])\/(0[13578]|1[02])\/((19|[2-9]\d)\d{2}))|((0[1-9]|[12]\d|30)\/(0[13456789]|1[012])\/((19|[2-9]\d)\d{2}))|((0[1-9]|1\d|2[0-8])\/02\/((19|[2-9]\d)\d{2}))|(29\/02\/((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$/;
+    var source = evt.getSource();
+    var dateId = source.getProperty("dateField");
+    var id = source.findComponent(dateId);
+    var field = source.getProperty("fieldName");
+    var msgId = source.getProperty("dateMsgField");
+    var msg = source.findComponent(msgId);
+    console.log("dateExp " + dateExp);
+    console.log("Injtia date valid: " + id.getSubmittedValue());
+    if (id.getSubmittedValue() != "" && !(id.getSubmittedValue().match(dateExp))) {
+        console.log("date value: " + id.getSubmittedValue());
+        console.log("Message Id" + msgId);
+        evt.cancel();
+        msg.setMessage("Please enter a valid " + field + ".");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+    else if (validateDateValues(id)) {
+        evt.cancel();
+        msg.setMessage("Please enter a valid " + field + ".");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+    else if (id.getSubmittedValue() == "") {
+        console.log("Message Id" + msgId);
+        console.log("date value is enmpty: " + id.getSubmittedValue());
+
+    }
+    console.log("reaching");
+    msg.setMessage("");
+    AdfPage.PAGE.addPartialTrigger(msg);
+    //        else{
+    //           msg.setMessage(null);
+    //            AdfPage.PAGE.addPartialTrigger(msg);
+    //        }
+}
+
+/*
+     * Shift : 16
+        ")" : 48
+        "!" : 49
+        "@" : 50
+        "#" : 51
+        "$" : 52
+        "^" : 54
+        "&" : 55
+        "*" : 56
+        "(" : 57
+        ":" : 59
+        "+" : 61
+        "__" : 173
+        "<" : 188
+        ">" : 190
+        "?" : 191
+        "~" : 192
+        "{" : 219
+        "|" : 220
+        "}" : 221
+
+
+        ";" : 59
+        "=" : 61
+        "*" : 106
+        "-" : 173
+        ”,” : 188
+        "." : 190
+        "/" : 191
+        "[" : 219
+        "\" : 220
+        "]" : 221
+        "‘" : 222
+     */
+function validateProposedName(evt) {
+    var _keyCode = evt.getKeyCode();
+    console.log("_keyCode " + _keyCode);
+    var _filterField = evt.getCurrentTarget();
+    var _oldValue = _filterField.getValue();
+    if (_keyCode == 16)
+        isShift = true;//else shiftkeydn=false;
+    if ((isShift == true && ((_keyCode > 47 && _keyCode < 53) || (_keyCode > 53 && _keyCode < 58) || (_keyCode > 189 && _keyCode < 193) || (_keyCode > 218 && _keyCode < 222) || _keyCode == 59 || _keyCode == 61 || _keyCode == 173 || _keyCode == 188)))
+        return true;
+    if ((isShift == true && _keyCode == 53)) {
+        _filterField.setValue(_oldValue);
+        evt.cancel();
+    }
+    keychar = String.fromCharCode(_keyCode);
+}
+
+function validateOfficerName(evt) {
+    var _keyCode = evt.getKeyCode();
+
+    var _filterField = evt.getCurrentTarget();
+    var _oldValue = _filterField.getValue();
+    if (_keyCode == 16)
+        isShift = true;//else shiftkeydn=false;
+    if ((isShift == true && ((_keyCode > 49 && _keyCode < 53) || (_keyCode > 53 && _keyCode < 58))) || (isShift == true && _keyCode == 48))
+        return true;
+    if ((isShift == true && _keyCode == 49) || (isShift == true && _keyCode == 53) || (_keyCode > 47 && _keyCode < 58) || (_keyCode > 95 && _keyCode < 106)) {
+        _filterField.setValue(_oldValue);
+        evt.cancel();
+    }
+    keychar = String.fromCharCode(_keyCode);
+
+}
+
+//Allow only alphaNumerics and Spaces,Hyphen(-) and forward slash (/),#,\,.,',,,&
+//keycode 61(=) is Added to restrict in foreign Adress
+function foriegnAddressValidation(evt) {
+    var _keyCode = evt.getKeyCode();
+
+    var _filterField = evt.getCurrentTarget();
+    var _oldValue = _filterField.getValue();
+
+    if (_keyCode == 32 || _keyCode == 109 || _keyCode == 111 || (isShift == false && _keyCode == 189) || (isShift == false && _keyCode == 191) || _keyCode == 51 || (isShift == false && _keyCode == 190) || _keyCode == 110 || _keyCode == 55 || (isShift == false && _keyCode == 188) || (isShift == false && _keyCode == 220) || (isShift == false && _keyCode == 222))
+        return true;
+    if (_keyCode == 16)
+        isShift = true;//else shiftkeydn=false;
+    if (isShift == true || ((_keyCode == 61) || (_keyCode > 105 && _keyCode < 112) || (_keyCode > 185 && _keyCode < 193) || (_keyCode > 218 && _keyCode < 223))) {
+        _filterField.setValue(_oldValue);
+        evt.cancel();
+    }
+    keychar = String.fromCharCode(_keyCode);
+}
+
+// To allow only Numbers and Dots [Exa: Salary]
+// Except only numbers and dot (.) for cost/price textbox
+function onlyDotsandNumbers(evt) {
+    var _keyCode = evt.getKeyCode();
+
+    var _filterField = evt.getCurrentTarget();
+    var _oldValue = _filterField.getValue();
+      // alert(_keyCode);
+      
+    if (_keyCode == 16)
+        isShift = true;//else shiftkeydn=false;
+      
+if (_keyCode == 110 || (_keyCode == 190&&isShift!=true))
+        return true;
+  
+     
+    if (isShift == true || ((_keyCode == 32) || (_keyCode > 64 && _keyCode < 91) || (_keyCode > 105 && _keyCode < 112) || (_keyCode > 185 && _keyCode < 193) || (_keyCode > 218 && _keyCode < 223))) {
+        _filterField.setValue(_oldValue);
+        evt.cancel();
+    }
+    keychar = String.fromCharCode(_keyCode);
+  
+}
+
+function fixedLineValidation(evt) {
+    var source = evt.getSource();
+    var moibleId = source.getProperty("lineField");
+    var mobileNumber;
+    var msgId = source.getProperty("lineMsgField");
+    var msg = source.findComponent(msgId);
+
+    if (moibleId == null) {
+        mobileNumber = source.getValue();
+    }
+    else {
+        mobileNumber = source.findComponent(moibleId).getValue();
+    }
+    if ((mobileNumber.length == 8) && ((mobileNumber.indexOf(6) == 0) || (mobileNumber.indexOf(3) == 0))) {
+        msg.setMessage("");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return true;
+
+    }
+    else {
+        evt.cancel();
+        msg.setMessage("Mobile number is invalid!");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+}
+
+function companyTelValidation(evt) {
+    var source = evt.getSource();
+    var moibleId = source.getProperty("lineField");
+    var mobileNumber;
+    var msgId = source.getProperty("lineMsgField");
+    var msg = source.findComponent(msgId);
+
+    if (moibleId == null) {
+        mobileNumber = source.getValue();
+    }
+    else {
+        mobileNumber = source.findComponent(moibleId).getValue();
+    }
+    if ((mobileNumber.length == 8) && ((mobileNumber.indexOf(6) == 0) || (mobileNumber.indexOf(3) == 0) || (mobileNumber.indexOf(8) == 0))) {
+        msg.setMessage("");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return true;
+
+    }
+    else {
+        evt.cancel();
+        msg.setMessage("Please enter a valid Company Telephone Number.");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+}
+//To allow only Alphabates [Exa: First Name]
+// Allow only Alphabates
+function lettersOnly(evt) {
+    var _keyCode = evt.getKeyCode();
+
+    var _filterField = evt.getCurrentTarget();
+    var _oldValue = _filterField.getValue();
+    if (_keyCode == 16)
+        isShift = true;//else shiftkeydn=false;
+    if (isShift == true || ((_keyCode > 47 && _keyCode < 58) || (_keyCode > 95 && _keyCode < 112) || (_keyCode > 185 && _keyCode < 193) || (_keyCode > 218 && _keyCode < 223))) {
+        _filterField.setValue(_oldValue);
+        evt.cancel();
+    }
+    keychar = String.fromCharCode(_keyCode);
+
+}
+
+//To allow only Alphabates and White Spaces [Exa: Name]
+// Allow only Alphabates and White Space for Name
+//Kishore - Updated it to disallow numbers and "-" - 173, "=" - 61, ";" - 59 characters
+function lettersAndSpaceOnly(evt) {
+    var _keyCode = evt.getKeyCode();
+
+    var _filterField = evt.getCurrentTarget();
+    var _oldValue = _filterField.getValue();
+
+    if (_keyCode == 32)
+        return true;
+    if (_keyCode == 16)
+        isShift = true;//else shiftkeydn=false;
+    //Kishore - cancel "-" - 173, "=" - 61, ";" - 59 characters also
+    if (isShift == true || ((_keyCode == 59 || _keyCode == 61 || _keyCode == 173) || (_keyCode > 47 && _keyCode < 58) || (_keyCode > 95 && _keyCode < 112) || (_keyCode > 185 && _keyCode < 193) || (_keyCode > 218 && _keyCode < 223))) {
+        _filterField.setValue(_oldValue);
+        evt.cancel();
+    }
+    keychar = String.fromCharCode(_keyCode);
+
+}
+
+//Allow only Numbers
+function numbersOnly(evt) {
+    var _keyCode = evt.getKeyCode();
+    var modifier = evt.getKeyModifiers();
+    var _filterField = evt.getCurrentTarget();
+    var _oldValue = _filterField.getValue();
+    if(modifier == AdfKeyStroke.CTRL_MASK && _keyCode == 86) {
+        keychar = String.fromCharCode(_keyCode);
+        return;    
+    }
+    if (modifier == AdfKeyStroke.SHIFT_MASK || ((_keyCode == 32) || (_keyCode > 64 && _keyCode < 91) || (_keyCode > 105 && _keyCode < 112) || (_keyCode > 185 && _keyCode < 193) || (_keyCode > 218 && _keyCode < 223))) {
+        _filterField.setValue(_oldValue);
+        evt.cancel();
+    }
+    keychar = String.fromCharCode(_keyCode);
+}
+
+function onlyDotsandNumbers(evt) {
+    var _keyCode = evt.getKeyCode();
+
+    var _filterField = evt.getCurrentTarget();
+    var _oldValue = _filterField.getValue();
+   // alert(_keyCode);
+    if (_keyCode == 16)
+        isShift = true;//else shiftkeydn=false;
+ if (_keyCode == 110 || (_keyCode == 190 && isShift!=true))
+        return true;
+   
+   
+         
+    if ((isShift == true && _keyCode == 190) || isShift == true || ((_keyCode == 32) || (_keyCode > 64 && _keyCode < 91) || (_keyCode > 105 && _keyCode < 112) || (_keyCode > 185 && _keyCode < 193) || (_keyCode > 218 && _keyCode < 223))) {
+        _filterField.setValue(_oldValue);
+        evt.cancel();
+    }
+    keychar = String.fromCharCode(_keyCode);
+
+}
+
+//Allow only AlphaNumerics
+function alphaNumericOnly(evt) {
+
+    var _keyCode = evt.getKeyCode();
+    var modifier = evt.getKeyModifiers();
+    var _filterField = evt.getCurrentTarget();
+    var _oldValue = _filterField.getValue();
+    
+    if (modifier == AdfKeyStroke.SHIFT_MASK || ((_keyCode == 32) || (_keyCode > 105 && _keyCode < 112) || (_keyCode > 185 && _keyCode < 193) || (_keyCode > 218 && _keyCode < 223)) || (_keyCode == 173) || (_keyCode == 61) || (_keyCode == 59)) {
+        _filterField.setValue(_oldValue);
+        evt.cancel();
+    }
+    keychar = String.fromCharCode(_keyCode);
+
+}
+
+function alphaNumericWithWhiteSpace(evt) {
+
+    var _keyCode = evt.getKeyCode();
+
+    var _filterField = evt.getCurrentTarget();
+    var _oldValue = _filterField.getValue();
+    if (_keyCode == 16)
+        isShift = true;//else shiftkeydn=false;
+    if (isShift == true || ((_keyCode > 105 && _keyCode < 112) || (_keyCode > 185 && _keyCode < 193) || (_keyCode > 218 && _keyCode < 223))) {
+        _filterField.setValue(_oldValue);
+        evt.cancel();
+    }
+    keychar = String.fromCharCode(_keyCode);
+
+}
+
+function validateUnit(evt) {
+    var _keyCode = evt.getKeyCode();
+    var unitposition = document.getElementById(evt.getSource().getClientId()+"::content").selectionStart
+    var modifier = evt.getKeyModifiers();
+   // alert(modifier!=AdfKeyStroke.SHIFT_MASK && unitposition >0) ;        
+    if(modifier!=AdfKeyStroke.SHIFT_MASK && unitposition >0 && (_keyCode == 189 || _keyCode == 191 || _keyCode == 59 || _keyCode == 173 || _keyCode == 191 || _keyCode == 189 || _keyCode == 188 || _keyCode == 186 || _keyCode == 111 || _keyCode == 109)) {    
+        return true;
+    }    
+     else if (modifier==AdfKeyStroke.SHIFT_MASK || ((_keyCode == 32)|| (_keyCode == 59)|| (_keyCode == 173)|| (_keyCode > 105 && _keyCode < 109)||(_keyCode==110)|| (_keyCode > 185 && _keyCode < 193) || (_keyCode > 218 && _keyCode < 223) )) {        
+        evt.cancel();
+    }
+    keychar = String.fromCharCode(_keyCode);
+}
+
+function paRegLevel(evt) {
+
+    var _keyCode = evt.getKeyCode();
+
+    var _filterField = evt.getCurrentTarget();
+    var _oldValue = _filterField.getValue();
+
+    if (isShift == true || ((_keyCode == 186) || (_keyCode == 187) || (_keyCode == 190) || (_keyCode == 110))) {
+        _filterField.setValue(_oldValue);
+        evt.cancel();
+    }
+    keychar = String.fromCharCode(_keyCode);
+
+}
+
+//Allow only alphaNumerics and Spaces,Hyphen(-) and forward slash (/) (Ex: Bank Account Number)
+function alphaNumericWithSpaceHyphenSlashOnly(evt) {
+    var _keyCode = evt.getKeyCode();
+
+    var _filterField = evt.getCurrentTarget();
+    var _oldValue = _filterField.getValue();
+
+    if (_keyCode == 32 || _keyCode == 109 || _keyCode == 111 || _keyCode == 189 || _keyCode == 188 || _keyCode == 190 || _keyCode == 191)
+        return false;
+    if (_keyCode == 16)
+        isShift = true;//else shiftkeydn=false;
+    if (isShift == true || ((_keyCode > 105 && _keyCode < 112) || (_keyCode > 185 && _keyCode < 193) || (_keyCode > 218 && _keyCode < 223))) {
+        _filterField.setValue(_oldValue);
+        evt.cancel();
+    }
+    keychar = String.fromCharCode(_keyCode);
+}
+
+//Allow only alphaNumerics and commas (Ex: Name of Account Holders)
+function alphaNumericWithCommaOnly(evt) {
+    var _keyCode = evt.getKeyCode();
+
+    var _filterField = evt.getCurrentTarget();
+    var _oldValue = _filterField.getValue();
+
+    if (_keyCode == 188)
+        return true;
+    if (_keyCode == 16)
+        isShift = true;//else shiftkeydn=false;
+    if (isShift == true || ((_keyCode > 105 && _keyCode < 112) || (_keyCode > 185 && _keyCode < 193) || (_keyCode > 218 && _keyCode < 223))) {
+        _filterField.setValue(_oldValue);
+        evt.cancel();
+    }
+    keychar = String.fromCharCode(_keyCode);
+}
+
+function onkeyup(evt) {
+    var charCode = evt.getKeyCode();
+    if (charCode == 16)
+        isShift = false;
+
+}
+
+function clickRow(evt) {
+    var source = evt.getSource();
+    AdfLogger.LOGGER.logMessage(AdfLogger.ERROR, "clickOnRow");
+    AdfCustomEvent.queue(source, "clickOnRow",
+    {
+    },
+false);
+}
+
+function showPopup(popupId, dialogId, attributeId) {
+    return function (evt) {
+        evt.cancel();
+        var source = evt.getSource();
+
+        var popup = source.findComponent(popupId);
+        var departmentId = source.getProperty("departmentId");
+
+        AdfLogger.LOGGER.logMessage(AdfLogger.ERROR, "showPopup for " + departmentId);
+
+        popup.show();
+        var dialog = popup.findComponent("dialog1");
+        dialog.setTitle("Department Id " + departmentId);
+        AdfLogger.LOGGER.logMessage(AdfLogger.ERROR, "setTitle");
+    }
+}
+
+/*function emailValidation(evt) {
+
+    var source = evt.getSource();
+    var emailValue=source.getValue();
+    var msgId=source.getProperty("emailMsgField");
+    var msg=AdfPage.PAGE.findComponent(msgId);
+    var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    if(emailValue.match(mailformat))
+    {
+        msg.setMessage("");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return true;
+    }
+    else
+    {
+        evt.cancel();
+        msg.setMessage("You have entered  wrong email id !");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+}*/
+
+function cpehoursValidation(evt) {
+    var source = evt.getSource();
+    var emailId = source.getProperty("cpeField");
+    var email;
+    var msgId = source.getProperty("cpeMsgField");
+    var msg = source.findComponent(msgId);
+    if (emailId == null) {
+        email = source.getValue();
+    }
+    else {
+        email = source.findComponent(emailId).getValue();
+    }
+    if (email.indexOf('.') ==  - 1) {
+        msg.setMessage("");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return true;
+    }
+    else {
+        email = email.substring(email.indexOf(".") + 1, email.length);
+
+        if (email.length != 1 || ((email != 5) && (email != 0))) {
+            evt.cancel();
+            msg.setMessage("Only whole numbers or incremental hours of 0.5 hours are accepted.");
+            AdfPage.PAGE.addPartialTrigger(msg);
+            return null;
+
+        }
+        else {
+            msg.setMessage("");
+            AdfPage.PAGE.addPartialTrigger(msg);
+            return true;
+        }
+    }
+
+}
+
+function emailValidation_paReg(evt) {
+ var t,
+  a = e.getSource(),
+  n = a.getProperty('emailField'),
+  r = a.getProperty('emailMsgField'),
+//  g = a.getProperty('fieldName'),
+  l = a.findComponent(r),
+  i = /^[_A-Za-z0-9-]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{1,})$/;
+  t = null == n ? a.getValue()  : a.findComponent(n).getValue();
+  if (t.length <= 320) {
+    return t = null == n ? a.getValue()  : a.findComponent(n).getValue(),
+    t.match(i) ? (l.setMessage(''), AdfPage.PAGE.addPartialTrigger(l), !0)  : 0 !== t.length ? (e.cancel(), l.setMessage("Please enter a valid Email Address."), AdfPage.PAGE.addPartialTrigger(l), null)  : void l.setMessage('')
+  } else {
+    e.cancel(),
+    l.setMessage("Please enter a valid Email Address."),
+    AdfPage.PAGE.addPartialTrigger(l);
+  }
+}
+
+function emailValidation(evt) {
+  var t,
+  a = e.getSource(),
+  n = a.getProperty('emailField'),
+  r = a.getProperty('emailMsgField'),
+//  g = a.getProperty('fieldName'),
+  l = a.findComponent(r),
+  i = /^[_A-Za-z0-9-]+(\.[_A-Za-z0-9-]+)*@[_A-Za-z0-9-]+(\.[_A-Za-z0-9-]+)*(\.[A-Za-z]{1,})$/;
+  t = null == n ? a.getValue()  : a.findComponent(n).getValue();
+  if (t.length <= 320) {
+    return t = null == n ? a.getValue()  : a.findComponent(n).getValue(),
+    t.match(i) ? (l.setMessage(''), AdfPage.PAGE.addPartialTrigger(l), !0)  : 0 !== t.length ? (e.cancel(), l.setMessage("Please enter a valid Email Address."), AdfPage.PAGE.addPartialTrigger(l), null)  : void l.setMessage('')
+  } else {
+    e.cancel(),
+    l.setMessage("Please enter a valid Email Address."),
+    AdfPage.PAGE.addPartialTrigger(l);
+  }
+}
+
+function clearMobileMessage(evt) {
+    var source = evt.getSource();
+    var msgId = source.getProperty("mobileMsgField");
+    var msg = source.findComponent(msgId);
+    msg.setMessage("");
+    AdfPage.PAGE.addPartialTrigger(msg);
+    return true;
+}
+
+function clearEmailMessage(evt) {
+    var source = evt.getSource();
+    var msgId = source.getProperty("emailMsgField");
+    var msg = source.findComponent(msgId);
+    msg.setMessage("");
+    AdfPage.PAGE.addPartialTrigger(msg);
+    return true;
+}
+
+function mobileValidationpaReg(evt) {
+    var source = evt.getSource();
+    var msgId = source.getProperty("mobileMsgField");
+    var msg = source.findComponent(msgId);
+    var mobileNumber = source.getValue();
+    if (mobileNumber == "") {
+        evt.cancel();
+        msg.setMessage("Please enter a valid Local Mobile No.");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    } else if ((mobileNumber.length === 8) && ((mobileNumber.indexOf(8) === 0) || (mobileNumber.indexOf(9) === 0))) {
+        msg.setMessage("");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return true;
+    } else {
+        evt.cancel();
+        msg.setMessage("Please enter a valid Local Mobile No.");
+        return null;
+    }
+}
+
+function mobileValidation(evt) {
+    var source = evt.getSource();
+    var moibleId = source.getProperty("mobileField");
+    var mobileNumber;
+    var msgId = source.getProperty("mobileMsgField");
+    var msg = source.findComponent(msgId);
+
+    if (moibleId == null) {
+        mobileNumber = source.getValue();
+    }
+    else {
+        mobileNumber = source.findComponent(moibleId).getValue();
+    }
+
+    if ((null != mobileNumber) && (mobileNumber != "")) {
+
+        if ((mobileNumber.length == 8) && ((mobileNumber.indexOf(8) == 0) || (mobileNumber.indexOf(9) == 0))) {
+            msg.setMessage("");
+            AdfPage.PAGE.addPartialTrigger(msg);
+            return true;
+
+        }
+        else {
+            evt.cancel();
+            msg.setMessage("Please enter a valid Local Mobile No.");
+            AdfPage.PAGE.addPartialTrigger(msg);
+            return null;
+        }
+    }
+    else {
+        msg.setMessage("");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return true;
+    }
+
+}
+
+function mobileValidation_paReg(evt) {
+    var source = evt.getSource();
+    var moibleId = source.getProperty("mobileField");
+    var mobileNumber;
+    var msgId = source.getProperty("mobileMsgField");
+    var msg = source.findComponent(msgId);
+
+    mobileNumber = source.getValue();
+
+    if (mobileNumber == "") {
+        evt.cancel();
+        msg.setMessage("Please enter a valid Local Mobile No.");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+
+    }
+    else if ((mobileNumber.length == 8) && ((mobileNumber.indexOf(8) == 0) || (mobileNumber.indexOf(9) == 0))) {
+        msg.setMessage("");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return true;
+
+    }
+    else {
+        evt.cancel();
+        msg.setMessage("Please enter a valid Local Mobile No.");
+
+        return null;
+    }
+}
+
+function fixedLineValidation(evt) {
+    var source = evt.getSource();
+    var moibleId = source.getProperty("lineField");
+    var mobileNumber;
+    var msgId = source.getProperty("lineMsgField");
+    var msg = source.findComponent(msgId);
+
+    if (moibleId == null) {
+        mobileNumber = source.getValue();
+    }
+    else {
+        mobileNumber = source.findComponent(moibleId).getValue();
+    }
+    if ((mobileNumber.length == 8) && ((mobileNumber.indexOf(6) == 0) || (mobileNumber.indexOf(3) == 0))) {
+        msg.setMessage("");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return true;
+
+    }
+    else {
+        evt.cancel();
+        msg.setMessage("Please enter a valid Local Fixed Line No.");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+}
+
+function fixedLineValidationnew(evt) {
+    var source = evt.getSource();
+    var moibleId = source.getProperty("lineField");
+    var mobileNumber;
+    var msgId = source.getProperty("lineMsgField");
+    var msg = source.findComponent(msgId);
+
+    if (moibleId == null) {
+        mobileNumber = source.getValue();
+    }
+    else {
+        mobileNumber = source.findComponent(moibleId).getValue();
+    }
+    if ((mobileNumber.length == 8) && ((mobileNumber.indexOf(6) == 0))) {
+        msg.setMessage("");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return true;
+
+    }
+    else {
+        evt.cancel();
+        msg.setMessage("You have entered wrong Company Tel No!");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+}
+
+function postalCodeValidation(evt) {
+    var source = evt.getSource();
+    var postalId = source.getProperty("postalField");
+    var mobileNumber;
+    var msgId = source.getProperty("postalMsgField");
+    var msg = source.findComponent(msgId);
+
+    if (postalId == null) {
+        postalNumber = source.getValue();
+
+    }
+    else {
+        postalNumber = source.findComponent(postalId).getValue();
+    }
+    if (postalNumber.length == 0 || postalNumber == "") {
+        evt.cancel();
+        msg.setMessage("Please enter a valid Postal Code.");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+    else if (postalNumber.length == 6) {
+        msg.setMessage("");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return true;
+
+    }
+    else {
+        evt.cancel();
+        msg.setMessage("Please enter a valid Postal Code.");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+}
+
+function clearGlobalMessage() {
+    AdfPage.PAGE.clearMessages(null);
+}
+
+function setTabIndex(min, max) {
+    return function (evt) {
+        var minTabIndex = min;
+        var maxTabIndex = max;
+
+        var keyCodePressed = evt.getKeyCode();
+        var keyModifiers = evt.getKeyModifiers();
+        var component = evt.getSource();
+        var panelForm = component.getParent();
+
+        if (keyCodePressed == AdfKeyStroke.TAB_KEY) {
+            evt.cancel();
+
+            var tabIndex = parseInt(component.getProperty("tabindex"));
+            AdfLogger.LOGGER.logMessage(AdfLogger.ERROR, "setTabIndex found index: " + tabIndex);
+
+            if (keyModifiers == AdfKeyStroke.SHIFT_MASK) {
+                // backward tab
+                tabIndex = (tabIndex - 1) < minTabIndex ? maxTabIndex : tabIndex - 1;
+                AdfLogger.LOGGER.logMessage(AdfLogger.ERROR, "setTabIndex new index: " + tabIndex);
+                setComponentFocus(panelForm.getDescendantComponents(), tabIndex);
+            }
+            else {
+                // forward tab
+                tabIndex = (tabIndex + 1) > maxTabIndex ? minTabIndex : tabIndex + 1;
+                AdfLogger.LOGGER.logMessage(AdfLogger.ERROR, "setTabIndex 2 new index: " + tabIndex);
+                setComponentFocus(panelForm.getDescendantComponents(), tabIndex);
+            }
+        }
+    }
+}
+
+function setComponentFocus(childComponentArray, focusIndex) {
+    AdfLogger.LOGGER.logMessage(AdfLogger.ERROR, "setComponentFocus");
+
+    for (indx in childComponentArray) {
+        var comp = childComponentArray[indx];
+        if (comp instanceof AdfRichInputText || comp instanceof AdfRichInputDate) {
+            var compIndx = comp.getProperty("tabindex");
+            if (compIndx == focusIndex) {
+                comp.focus();
+                AdfLogger.LOGGER.logMessage(AdfLogger.ERROR, "focus on id:" + compIndx);
+                return false;
+            }
+        }
+    }
+    return false;
+}
+
+//generalLodgmentDateValidation
+// This method will identify given date is future date or not, if future it will throw error
+function futureDateValidation(evt) {
+    var date = new Date();
+    var curDate = date.getUTCDate();
+    var curMnt = date.getMonth() + 1;
+    var curYr = date.getUTCFullYear();
+    var dateExp = /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/;
+    var source = evt.getSource();
+    var dateId = source.getProperty("dateField");
+    var id = source.findComponent(dateId);
+    var msgId = source.getProperty("dateMsgField");
+    var msg = source.findComponent(msgId);
+    var field = source.getProperty("fieldName");
+    if (id.getSubmittedValue() == "") {
+        evt.cancel();
+        if (field != null) {
+            msg.setMessage("Please enter a valid " + field + "");
+        }
+        else {
+            msg.setMessage("Please Enter a Date.");
+        }
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+    if (!id.getSubmittedValue().match(dateExp)) {
+        evt.cancel();
+        if (field != null) {
+            msg.setMessage("Please enter a valid " + field + "");
+        }
+        else {
+            msg.setMessage("Date entered is invalid.");
+        }
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+    var dt = id.getSubmittedValue().substring(0, 2);
+    var mnt = id.getSubmittedValue().substring(3, 5);
+    var yr = id.getSubmittedValue().substring(6, 10);
+    if (yr < 1900) {
+        evt.cancel();
+        if (field != null) {
+            msg.setMessage("Please enter a valid " + field + ".");
+        }
+        else {
+            msg.setMessage("Year Should be Greater than 1900");
+        }
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+    if (yr > curYr || (yr == curYr && mnt > curMnt) || (yr == curYr && mnt == curMnt && dt > curDate)) {
+        evt.cancel();
+        if (field != null) {
+            msg.setMessage("Please enter a valid date. " + field + " must be an earlier date.");
+        }
+        else {
+            msg.setMessage("Date should not be a future date");
+        }
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+    msg.setMessage("");
+    AdfPage.PAGE.addPartialTrigger(msg);
+}
+
+function FaRegfutureDateValidation(evt) {
+    var date = new Date();
+    var curDate = date.getUTCDate();
+    var curMnt = date.getMonth() + 1;
+    var curYr = date.getUTCFullYear();
+    var dateExp = /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/;
+    var source = evt.getSource();
+    var dateId = source.getProperty("dateField");
+    var id = source.findComponent(dateId);
+    var msgId = source.getProperty("dateMsgField");
+    var msg = source.findComponent(msgId);
+    if (!id.getSubmittedValue().match(dateExp)) {
+        evt.cancel();
+        msg.setMessage("Please enter a valid Permission to act from Start Date.");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+    var dt = id.getSubmittedValue().substring(0, 2);
+    var mnt = id.getSubmittedValue().substring(3, 5);
+    var yr = id.getSubmittedValue().substring(6, 10);
+    if (yr < 1900) {
+        evt.cancel();
+        msg.setMessage("Please enter a valid Permission to act from Start Date.");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+    if (yr > curYr || (yr == curYr && mnt > curMnt) || (yr == curYr && mnt == curMnt && dt > curDate)) {
+        evt.cancel();
+        msg.setMessage("Please enter a valid date. Permission to act from Start Date must be an earlier date.");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+    msg.setMessage("");
+    AdfPage.PAGE.addPartialTrigger(msg);
+}
+
+function FaRegfutureDateValidationEnd(evt) {
+    var date = new Date();
+    var curDate = date.getUTCDate();
+    var curMnt = date.getMonth() + 1;
+    var curYr = date.getUTCFullYear();
+    var dateExp = /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/;
+    var source = evt.getSource();
+    var dateId = source.getProperty("dateField");
+    var id = source.findComponent(dateId);
+    var msgId = source.getProperty("dateMsgField");
+    var msg = source.findComponent(msgId);
+    if (!id.getSubmittedValue().match(dateExp)) {
+        evt.cancel();
+        msg.setMessage("Please enter a valid End Date.");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+    var dt = id.getSubmittedValue().substring(0, 2);
+    var mnt = id.getSubmittedValue().substring(3, 5);
+    var yr = id.getSubmittedValue().substring(6, 10);
+    if (yr < 1900) {
+        evt.cancel();
+        msg.setMessage("Please enter a valid End Date.");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+    if (yr > curYr || (yr == curYr && mnt > curMnt) || (yr == curYr && mnt == curMnt && dt > curDate)) {
+        evt.cancel();
+        msg.setMessage("Please enter a valid Date.End Date cannont be future date.");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+    msg.setMessage("");
+    AdfPage.PAGE.addPartialTrigger(msg);
+}
+
+function QiRegfutureDateValidationDOB(evt) {
+    var date = new Date();
+    var curDate = date.getUTCDate();
+    var curMnt = date.getMonth() + 1;
+    var curYr = date.getUTCFullYear();
+    var dateExp = /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/;
+    var source = evt.getSource();
+    var dateId = source.getProperty("dateField");
+    var id = source.findComponent(dateId);
+    var msgId = source.getProperty("dateMsgField");
+    var msg = source.findComponent(msgId);
+    if (!id.getSubmittedValue().match(dateExp)) {
+        evt.cancel();
+        msg.setMessage("Please enter a valid Date of Birth.");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+    var dt = id.getSubmittedValue().substring(0, 2);
+    var mnt = id.getSubmittedValue().substring(3, 5);
+    var yr = id.getSubmittedValue().substring(6, 10);
+    if (yr < 1900) {
+        evt.cancel();
+        msg.setMessage("Please enter a valid date.Date of Birth must be later than 1900.");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+    if (yr > curYr || (yr == curYr && mnt > curMnt) || (yr == curYr && mnt == curMnt && dt > curDate)) {
+        evt.cancel();
+        msg.setMessage("Please enter a valid Date.Date of Birth cannont be future date");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+    msg.setMessage("");
+    AdfPage.PAGE.addPartialTrigger(msg);
+}
+
+function paRegfutureDateValidation(evt) {
+    var date = new Date();
+    var curDate = date.getUTCDate();
+    var curMnt = date.getMonth() + 1;
+    var curYr = date.getUTCFullYear();
+    var source = evt.getSource();
+    var field = source.getProperty("fieldName");
+    var dateExp = /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/;
+    var dateId = source.getProperty("dateField");
+    var id = source.findComponent(dateId);
+    var msgId = source.getProperty("dateMsgField");
+    var msg = source.findComponent(msgId);
+    if (!id.getSubmittedValue().match(dateExp)) {
+        evt.cancel();
+        msg.setMessage("Please enter a valid " + field + ".");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+    var dt = id.getSubmittedValue().substring(0, 2);
+    var mnt = id.getSubmittedValue().substring(3, 5);
+    var yr = id.getSubmittedValue().substring(6, 10);
+    if (yr < 1900) {
+        evt.cancel();
+        msg.setMessage("Please enter a valid " + field + ".");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+    if (yr > curYr || (yr == curYr && mnt > curMnt) || (yr == curYr && mnt == curMnt && dt > curDate)) {
+        evt.cancel();
+        msg.setMessage("Please enter a valid date. " + field + " must be an earlier date");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+    msg.setMessage("");
+    AdfPage.PAGE.addPartialTrigger(msg);
+}
+
+function pafRegfutureDateValidation(evt) {
+    var date = new Date();
+    var curDate = date.getUTCDate();
+    var curMnt = date.getMonth() + 1;
+    var curYr = date.getUTCFullYear();
+    var source = evt.getSource();
+    var field = source.getProperty("fieldName");
+    var dateExp = /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/;   
+    var dateId = source.getProperty("dateField");
+    var id = source.findComponent(dateId);
+    var msgId = source.getProperty("dateMsgField");
+    var msg = source.findComponent(msgId);
+    if (!id.getSubmittedValue().match(dateExp)) {
+        evt.cancel();
+        msg.setMessage("Please enter a valid " + field+".");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+    var dt = id.getSubmittedValue().substring(0, 2);
+    var mnt = id.getSubmittedValue().substring(3, 5);
+    var yr = id.getSubmittedValue().substring(6, 10);
+    if (yr < 1900) {
+        evt.cancel();
+        msg.setMessage("Please enter a valid " + field+".");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+    if (yr < curYr || (yr == curYr && mnt < curMnt) || (yr == curYr && mnt == curMnt && dt < curDate)) {
+        evt.cancel();
+        msg.setMessage("Please enter a valid date. " + field+ " must be a future date.");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+    msg.setMessage("");
+    AdfPage.PAGE.addPartialTrigger(msg);
+}
+
+
+function paRegfutureDateValidaton(evt) {
+    var date = new Date();
+    var curDate = date.getUTCDate();
+    var curMnt = date.getMonth() + 1;
+    var curYr = date.getUTCFullYear();
+    var dateExp = /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/;
+    var source = evt.getSource();
+    var dateId = source.getProperty("dateField");
+    var id = source.findComponent(dateId);
+    var msgId = source.getProperty("dateMsgField");
+    var msg = source.findComponent(msgId);
+    if (!id.getSubmittedValue().match(dateExp)) {
+        evt.cancel();
+        msg.setMessage("Please enter a valid date");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+    var dt = id.getSubmittedValue().substring(0, 2);
+    var mnt = id.getSubmittedValue().substring(3, 5);
+    var yr = id.getSubmittedValue().substring(6, 10);
+    if (yr < 1900) {
+        evt.cancel();
+        msg.setMessage("Please enter a valid date");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+    if (yr > curYr || (yr == curYr && mnt > curMnt) || (yr == curYr && mnt == curMnt && dt > curDate)) {
+        evt.cancel();
+        msg.setMessage("Date should not be a future date");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+    msg.setMessage("");
+    AdfPage.PAGE.addPartialTrigger(msg);
+}
+
+function dateValidation(evt) {
+    var date = new Date();
+    var curDate = date.getUTCDate();
+    var curMnt = date.getUTCMonth();
+    var curYr = date.getUTCFullYear();
+
+    //alert(curDate);
+    //alert(curMnt);
+    //alert(curYr);
+    var dateExp = /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/;
+    var source = evt.getSource();
+    var dateId = source.getProperty("dateField");
+    var id = source.findComponent(dateId);
+    var msgId = source.getProperty("dateMsgField");
+    var msg = source.findComponent(msgId);
+    var field = source.getProperty("fieldName");
+    if (id.getSubmittedValue() != null && id.getSubmittedValue() != "") {
+        if (!id.getSubmittedValue().match(dateExp)) {
+            evt.cancel();
+            msg.setMessage("Date Should be in format dd/mm/yyyy");
+            AdfPage.PAGE.addPartialTrigger(msg);
+            return null;
+        }
+
+        var yrIndex = id.getSubmittedValue().lastIndexOf("/");
+        var yr = id.getSubmittedValue().substring(yrIndex + 1, id.getSubmittedValue().length);
+        if (yr < 1900) {
+            evt.cancel();
+            if (field != null) {
+                msg.setMessage("Please enter a valid " + field + ". Year Should be Greater than 1900");
+            }
+            else {
+                msg.setMessage("Please enter a valid date. Appointment date must be a future date.");
+            }
+            AdfPage.PAGE.addPartialTrigger(msg);
+            return null;
+        }
+        msg.setMessage("");
+        AdfPage.PAGE.addPartialTrigger(msg);
+    }
+}
+
+function dateValidation_noacrm(evt) {
+    var date = new Date();
+    var dateExp = /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/;
+    var source = evt.getSource();
+    var dateId = source.getProperty("dateField");
+    var id = source.findComponent(dateId);
+    var msgId = source.getProperty("dateMsgField");
+    var msg = source.findComponent(msgId);
+    if (id.getSubmittedValue() != null && id.getSubmittedValue() != "") {
+        if (!id.getSubmittedValue().match(dateExp)) {
+            evt.cancel();
+            msg.setMessage("Please enter a valid Date of Appointment.");
+            AdfPage.PAGE.addPartialTrigger(msg);
+            return null;
+        }
+
+        var yrIndex = id.getSubmittedValue().lastIndexOf("/");
+        var yr = id.getSubmittedValue().substring(yrIndex + 1, id.getSubmittedValue().length);
+        if (yr < 1900) {
+            evt.cancel();
+            msg.setMessage("Please enter a valid date.Date of Appointment must be later than 01/01/1900.");
+            AdfPage.PAGE.addPartialTrigger(msg);
+            return null;
+        }
+        msg.setMessage("");
+        AdfPage.PAGE.addPartialTrigger(msg);
+    }
+}
+
+function dateValidation_LL01_DOB(evt) {
+    var dateExp = /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/;
+    var source = evt.getSource();
+    var dateId = source.getProperty("dateField");
+    var id = source.findComponent(dateId);
+    var msgId = source.getProperty("dateMsgField");
+    var msg = source.findComponent(msgId);
+    var field = source.getProperty("fieldName");
+    if (id.getSubmittedValue() != null && id.getSubmittedValue() != "") {
+        if (!id.getSubmittedValue().match(dateExp)) {
+            evt.cancel();
+            msg.setMessage("Please enter a valid Date Of Birth.");
+            AdfPage.PAGE.addPartialTrigger(msg);
+            return null;
+        }
+
+        var yrIndex = id.getSubmittedValue().lastIndexOf("/");
+        var yr = id.getSubmittedValue().substring(yrIndex + 1, id.getSubmittedValue().length);
+        if (yr < 1900) {
+            evt.cancel();
+            msg.setMessage("Please enter a valid Date Of Birth.");
+            AdfPage.PAGE.addPartialTrigger(msg);
+            return null;
+        }
+        msg.setMessage("");
+        AdfPage.PAGE.addPartialTrigger(msg);
+    }
+}
+
+function characterCounter(evt) {
+
+    var source = evt.getSource();
+
+    var outField1 = source.getProperty("outField");
+
+    var maxlimit = parseInt(source.getProperty("maxLength"), 10);
+    var outputLabelForMsg = source.findComponent(outField1);
+
+    if (source.getValue() != 'null') {
+        //alert('Characters Left :'+ (maxlimit - (source.getSubmittedValue().length)))
+        if (source.getSubmittedValue().length > maxlimit) {
+            alert('cross max limit')
+            source.setValue(source.getSubmittedValue().substring(0, maxlimit));
+
+        }
+        else {
+            outputLabelForMsg.setValue(" Characters Left :" + (maxlimit - (source.getSubmittedValue().length)));
+        }
+        AdfPage.PAGE.addPartialTrigger(source);
+        AdfPage.PAGE.addPartialTrigger(outputLabelForMsg);
+    }
+
+    //o.setValue(characterCounterValue);
+    //o.setValue(characterCounterValue);
+}
+
+function printPage(event) {
+    window.print();
+    return true;
+}
+
+function bizChgfutureDateValidation(evt) {
+    var date = new Date();
+    var curDate = date.getUTCDate();
+    var curMnt = date.getMonth() + 1;
+    var curYr = date.getUTCFullYear();
+    var dateExp = /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/;
+    var source = evt.getSource();
+    var dateId = source.getProperty("dateField");
+    var id = source.findComponent(dateId);
+    var msgId = source.getProperty("dateMsgField");
+    var msg = source.findComponent(msgId);
+    var field = source.getProperty("fieldName");
+    var attributeId = source.getProperty("attribute");
+    var idvalue = id.getValue();
+    if (!id.getSubmittedValue().match(dateExp) && "" != id.getSubmittedValue()) {
+        evt.cancel();
+        //msg.setMessage("Please provide the "+field+" in DD/MM/YYYY format.");
+        msg.setMessage("Please enter a valid " + field + ".");
+        //idvalue.setValue("");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+    var dt = id.getSubmittedValue().substring(0, 2);
+    var mnt = id.getSubmittedValue().substring(3, 5);
+    var yr = id.getSubmittedValue().substring(6, 10);
+    if (yr < 1900 && yr != "") {
+        evt.cancel();
+        msg.setMessage("Please enter a valid " + field + ".");
+        //idvalue.setValue("");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+    if (yr > curYr || (yr == curYr && mnt > curMnt) || (yr == curYr && mnt == curMnt && dt > curDate)) {
+        evt.cancel();
+        if (attributeId != null) {
+            var str = "Please enter a valid date. <<>> must be an earlier date.";
+            msg.setMessage(str.replace("<<>>", attributeId));
+        }
+        else {
+            msg.setMessage("Please enter a valid date. " + field + " must be an earlier date.");
+        }
+        idvalue.setValue("");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+    msg.setMessage("");
+    AdfPage.PAGE.addPartialTrigger(msg);
+}
+
+function lpChgfutureDateValidation(evt) {
+    var date = new Date();
+    var curDate = date.getUTCDate();
+    var curMnt = date.getMonth() + 1;
+    var curYr = date.getUTCFullYear();
+    var dateExp = /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/;
+    var source = evt.getSource();
+    var dateId = source.getProperty("dateField");
+    var id = source.findComponent(dateId);
+    var msgId = source.getProperty("dateMsgField");
+    var msg = source.findComponent(msgId);
+    var field = source.getProperty("fieldName");
+    var attributeId = source.getProperty("attribute");
+    var idvalue = id.getValue();
+    if (!id.getSubmittedValue().match(dateExp) && "" != id.getSubmittedValue()) {
+        evt.cancel();
+        //msg.setMessage("Please provide the "+field+" in DD/MM/YYYY format.");
+        msg.setMessage("Please enter a valid " + field + ".");
+        //idvalue.setValue("");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+    var dt = id.getSubmittedValue().substring(0, 2);
+    var mnt = id.getSubmittedValue().substring(3, 5);
+    var yr = id.getSubmittedValue().substring(6, 10);
+    if (yr < 1900 && yr != "") {
+        evt.cancel();
+        msg.setMessage("Please enter a valid " + field);
+        //idvalue.setValue("");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+    if (yr > curYr || (yr == curYr && mnt > curMnt) || (yr == curYr && mnt == curMnt && dt > curDate)) {
+        evt.cancel();
+        if (attributeId != null) {
+            var str = "Please enter a valid date. <<>> must be an earlier date.";
+            msg.setMessage(str.replace("<<>>", attributeId));
+        }
+        else {
+            msg.setMessage("Please enter a valid date." + field + " must be an earlier date.");
+        }
+        idvalue.setValue("");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+    msg.setMessage("");
+    AdfPage.PAGE.addPartialTrigger(msg);
+}
+
+function paChgfutureDateValidation(evt) {
+    var date = new Date();
+    var curDate = date.getUTCDate();
+    var curMnt = date.getMonth() + 1;
+    var curYr = date.getUTCFullYear();
+    var dateExp = /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/;
+    var source = evt.getSource();
+    var dateId = source.getProperty("dateField");
+    var id = source.findComponent(dateId);
+    var msgId = source.getProperty("dateMsgField");
+    var msg = source.findComponent(msgId);
+    var field = source.getProperty("fieldName");
+    var attributeId = source.getProperty("attribute");
+    var idvalue = id.getValue();
+    if (!id.getSubmittedValue().match(dateExp) && "" != id.getSubmittedValue()) {
+        evt.cancel();
+        if (attributeId != null) {
+            var str2 = "Please provide the <<>> in DD/MM/YYYY format.";
+            msg.setMessage(str2.replace("<<>>", attributeId));
+        }
+        else {
+            msg.setMessage("Please enter a valid date");
+        }
+        //idvalue.setValue("");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+    var dt = id.getSubmittedValue().substring(0, 2);
+    var mnt = id.getSubmittedValue().substring(3, 5);
+    var yr = id.getSubmittedValue().substring(6, 10);
+    if (yr < 1900 && yr != "") {
+        evt.cancel();
+        if (attributeId != null) {
+            var str1 = "Please provide a date after 1900 for <<>>";
+            msg.setMessage(str1.replace("<<>>", attributeId));
+        }
+        else {
+            msg.setMessage("Year Should be Greater than 1900");
+        }
+        //idvalue.setValue("");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+    if (yr > curYr || (yr == curYr && mnt > curMnt) || (yr == curYr && mnt == curMnt && dt > curDate)) {
+        evt.cancel();
+        if (attributeId != null) {
+            var str = "Please enter a valid date. <<>> must be an earlier date";
+            msg.setMessage(str.replace("<<>>", attributeId));
+        }
+        else {
+            msg.setMessage("Date should not be a future date");
+        }
+        idvalue.setValue("");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+    msg.setMessage("");
+    AdfPage.PAGE.addPartialTrigger(msg);
+}
+
+function pastDateOnlyValidation(evt) {
+    var date = new Date();
+    var curDate = date.getUTCDate();
+    var curMnt = date.getMonth() + 1;
+    var curYr = date.getUTCFullYear();
+    var dateExp = /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/;
+    var source = evt.getSource();
+    var dateId = source.getProperty("dateField");
+    var id = source.findComponent(dateId);
+    var msgId = source.getProperty("dateMsgField");
+    var msg = source.findComponent(msgId);
+    if (!id.getSubmittedValue().match(dateExp) && id.getSubmittedValue() != "") {
+        evt.cancel();
+        msg.setMessage("Date entered is invalid.");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+    var dt = id.getSubmittedValue().substring(0, 2);
+    var mnt = id.getSubmittedValue().substring(3, 5);
+    var yrIndex = id.getSubmittedValue().lastIndexOf("/");
+    var yr = id.getSubmittedValue().substring(yrIndex + 1, id.getSubmittedValue().length);
+    if (yr > curYr || (yr == curYr && mnt > curMnt) || (yr == curYr && mnt == curMnt && dt > curDate) || (yr == curYr && mnt == curMnt && dt == curDate)) {
+        evt.cancel();
+        msg.setMessage("Date must not be current or future date.");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+    msg.setMessage("");
+    AdfPage.PAGE.addPartialTrigger(msg);
+}
+
+function nameChange(event) {
+    component = event.getSource();
+    AdfCustomEvent.queue(component, "nameChgEvent",
+    {
+        payload : component.getSubmittedValue()
+    },
+true);
+    event.cancel();
+}
+
+function showremaining(evt) {
+    var source = evt.getSource();
+    var outField1 = source.getProperty("outField");
+
+    var maxlimit = parseInt(source.getProperty("maxLength"), 1000);
+    maxlimit = 500;
+    var outputLabelForMsg = source.findComponent(outField1);
+
+    if (source.getValue() != 'null') {
+        //alert('Characters Left :'+ (maxlimit - (source.getSubmittedValue().length)))
+        if (source.getSubmittedValue().length > maxlimit) {
+            alert('cross max limit')
+            source.setValue(source.getSubmittedValue().substring(0, maxlimit));
+            outputLabelForMsg.setValue(" Characters Left :" + (maxlimit - (source.getSubmittedValue().length)));
+
+        }
+        else {
+            outputLabelForMsg.setValue(" Characters Left :" + (maxlimit - (source.getSubmittedValue().length)));
+        }
+        AdfPage.PAGE.addPartialTrigger(source);
+        AdfPage.PAGE.addPartialTrigger(outputLabelForMsg);
+    }
+}
+//Only allow alphabets and the following special characters
+//"@", "/" ,"&" ,"." ,"-" ,"(" ,")" ,"‘" ,”,”, ";", "[", "]", "~", "!", "^","__", "*", "#", "$", "+", "|", "{", "}", "<", ">", "?", "\", ": ",  "=",
+function validateProposedName(evt) {
+    var _keyCode = evt.getKeyCode();
+
+    var _filterField = evt.getCurrentTarget();
+    var _oldValue = _filterField.getValue();
+    if (_keyCode == 16)
+        isShift = true;//else shiftkeydn=false;
+    if ((isShift == true && ((_keyCode > 47 && _keyCode < 53) || (_keyCode > 53 && _keyCode < 58))) || (isShift == true && _keyCode == 48))
+        return true;
+    if ((isShift == true && _keyCode == 53) || (isShift == true && _keyCode == 222)) {
+        _filterField.setValue(_oldValue);
+        evt.cancel();
+    }
+    keychar = String.fromCharCode(_keyCode);
+
+}
+// This method will identify given date is future date or not, if future it will throw error
+function validateFuruteDate(evt) {
+    var date = new Date();
+    var curDate = date.getUTCDate();
+    var curMnt = date.getMonth() + 1;
+    var curYr = date.getUTCFullYear();
+    var dateExp = /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/;
+    var source = evt.getSource();
+    var dateId = source.getProperty("dateField");
+    var id = source.findComponent(dateId);
+    var msgId = source.getProperty("dateMsgField");
+    var msg = source.findComponent(msgId);
+
+    if (null != id.getSubmittedValue() && id.getSubmittedValue() != "" && !id.getSubmittedValue().match(dateExp)) {
+        evt.cancel();
+        msg.setMessage("Date entered is invalid.");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+    var dt = id.getSubmittedValue().substring(0, 2);
+    var mnt = id.getSubmittedValue().substring(3, 5);
+    var yr = id.getSubmittedValue().substring(6, 10);
+    if (yr != "" && yr < 1900) {
+        evt.cancel();
+        msg.setMessage("Year Should be Greater than 1900");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+    if (yr > curYr || (yr == curYr && mnt > curMnt) || (yr == curYr && mnt == curMnt && dt > curDate)) {
+        evt.cancel();
+        msg.setMessage("Date should not be a future date");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+    msg.setMessage("");
+    AdfPage.PAGE.addPartialTrigger(msg);
+}
+
+function dateFormatValidation(evt) {
+    var date = new Date();
+
+    var dateExp = /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/;
+    var source = evt.getSource();
+    var dateId = source.getProperty("dateField");
+    var id = source.findComponent(dateId);
+    var msgId = source.getProperty("dateMsgField");
+    var msg = source.findComponent(msgId);
+
+    if (!id.getSubmittedValue().match(dateExp)) {
+        evt.cancel();
+        msg.setMessage("Date entered is invalid.");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+}
+
+function futureDateValidationForDisqualification(evt) {
+    var date = new Date();
+    var curDate = date.getUTCDate();
+    var curMnt = date.getMonth() + 1;
+    var curYr = date.getUTCFullYear();
+    var dateExp = /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/;
+    var source = evt.getSource();
+    var dateId = source.getProperty("dateField");
+    var id = source.findComponent(dateId);
+    var msgId = source.getProperty("dateMsgField");
+    var msg = source.findComponent(msgId);
+    if (!id.getSubmittedValue().match(dateExp)) {
+        evt.cancel();
+        msg.setMessage("Date entered is invalid.");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+    var dt = id.getSubmittedValue().substring(0, 2);
+    var mnt = id.getSubmittedValue().substring(3, 5);
+    var yr = id.getSubmittedValue().substring(6, 10);
+    if (yr < 1900) {
+        evt.cancel();
+        msg.setMessage("Year Should be Greater than 1900");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+    if (yr > curYr || (yr == curYr && mnt > curMnt) || (yr == curYr && mnt == curMnt && dt > curDate)) {
+        evt.cancel();
+        msg.setMessage("Date should not be a future date");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+    msg.setMessage("");
+    AdfPage.PAGE.addPartialTrigger(msg);
+}
+
+function numbersandforwardslashOnly(evt) {
+
+    var _keyCode = evt.getKeyCode();
+    var _filterField = evt.getCurrentTarget();
+    var _oldValue = _filterField.getValue();
+    if (_keyCode == 16)
+        isShift = true;//else shiftkeydn=false;
+    if (isShift == true || ((_keyCode == 32) || (_keyCode > 64 && _keyCode < 91) || (_keyCode > 105 && _keyCode < 111) || (_keyCode > 185 && _keyCode < 190) || (_keyCode == 192 || _keyCode == 193) || (_keyCode > 218 && _keyCode < 223))) {
+        _filterField.setValue(_oldValue);
+        evt.cancel();
+    }
+    keychar = String.fromCharCode(_keyCode);
+    var date = new Date();
+    var source = evt.getSource();
+    var field = source.getProperty("fieldName");
+    if (_keyCode == 9) {
+        var dateExp = /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/;
+        
+        var dateId = source.getProperty("dateField");
+        var id = source.findComponent(dateId);
+
+        var msgId = source.getProperty("dateMsgField");
+        var msg = source.findComponent(msgId);
+        if (!id.getSubmittedValue() == "") {
+            if (!id.getSubmittedValue().match(dateExp)) {
+                //evt.cancel();
+                if (field != null) {
+                    msg.setMessage("Please enter a valid " + field + ".");
+                    // return null;
+                }
+                else {
+                    msg.setMessage("Please enter a valid date");
+                    // return null;
+                }
+                AdfPage.PAGE.addPartialTrigger(msg);
+                //return null;
+            }
+        }
+    }
+    /*else{
+    msg.setMessage("");
+AdfPage.PAGE.addPartialTrigger(msg);
+}*/
+
+}
+
+function numbersandforwardslashOnlyEnddate(evt) {
+
+    var _keyCode = evt.getKeyCode();
+
+    var field = source.getProperty("fieldName");
+    var _filterField = evt.getCurrentTarget();
+    var _oldValue = _filterField.getValue();
+    if (_keyCode == 16)
+        isShift = true;//else shiftkeydn=false;
+    if (isShift == true || ((_keyCode == 32) || (_keyCode > 64 && _keyCode < 91) || (_keyCode > 105 && _keyCode < 112) || (_keyCode > 185 && _keyCode < 190) || (_keyCode == 192 || _keyCode == 193) || (_keyCode > 218 && _keyCode < 223))) {
+        _filterField.setValue(_oldValue);
+        evt.cancel();
+    }
+    keychar = String.fromCharCode(_keyCode);
+    var date = new Date();
+    if (_keyCode == 9) {
+        var dateExp = /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/;
+        var source = evt.getSource();
+        var dateId = source.getProperty("dateField");
+        var id = source.findComponent(dateId);
+
+        var msgId = source.getProperty("dateMsgField");
+        var msg = source.findComponent(msgId);
+        if (!id.getSubmittedValue() == "") {
+            if (!id.getSubmittedValue().match(dateExp)) {
+                //evt.cancel();
+                if (field != null) {
+                    msg.setMessage("Please enter a valid end date.");
+                }
+                else {
+                    msg.setMessage("Please enter a valid end date.");
+                }
+                AdfPage.PAGE.addPartialTrigger(msg);
+                //return null;
+            }
+        }
+    }
+    /*else{
+    msg.setMessage("");
+AdfPage.PAGE.addPartialTrigger(msg);
+}*/
+
+}
+
+function numbersandforwardslashOnlyStartdate(evt) {
+
+    var _keyCode = evt.getKeyCode();
+
+    var field = source.getProperty("fieldName");
+    var _filterField = evt.getCurrentTarget();
+    var _oldValue = _filterField.getValue();
+    if (_keyCode == 16)
+        isShift = true;//else shiftkeydn=false;
+    if (isShift == true || ((_keyCode == 32) || (_keyCode > 64 && _keyCode < 91) || (_keyCode > 105 && _keyCode < 112) || (_keyCode > 185 && _keyCode < 190) || (_keyCode == 192 || _keyCode == 193) || (_keyCode > 218 && _keyCode < 223))) {
+        _filterField.setValue(_oldValue);
+        evt.cancel();
+    }
+    keychar = String.fromCharCode(_keyCode);
+    var date = new Date();
+    if (_keyCode == 9) {
+        var dateExp = /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/;
+        var source = evt.getSource();
+        var dateId = source.getProperty("dateField");
+        var id = source.findComponent(dateId);
+
+        var msgId = source.getProperty("dateMsgField");
+        var msg = source.findComponent(msgId);
+        if (!id.getSubmittedValue() == "") {
+            if (!id.getSubmittedValue().match(dateExp)) {
+                //evt.cancel();
+                if (field != null) {
+                    msg.setMessage("Please enter a valid Permission to act from start date.");
+                }
+                else {
+                    msg.setMessage("Please enter a valid Permission to act from start date.");
+                }
+                AdfPage.PAGE.addPartialTrigger(msg);
+                //return null;
+            }
+        }
+    }
+    /*else{
+    msg.setMessage("");
+AdfPage.PAGE.addPartialTrigger(msg);
+}*/
+
+}
+
+function numbersandforwardslashOnlyQiDOB(evt) {
+
+    var _keyCode = evt.getKeyCode();
+
+    var field = source.getProperty("fieldName");
+    var _filterField = evt.getCurrentTarget();
+    var _oldValue = _filterField.getValue();
+    if (_keyCode == 16)
+        isShift = true;//else shiftkeydn=false;
+    if (isShift == true || ((_keyCode == 32) || (_keyCode > 64 && _keyCode < 91) || (_keyCode > 105 && _keyCode < 112) || (_keyCode > 185 && _keyCode < 190) || (_keyCode == 192 || _keyCode == 193) || (_keyCode > 218 && _keyCode < 223))) {
+        _filterField.setValue(_oldValue);
+        evt.cancel();
+    }
+    keychar = String.fromCharCode(_keyCode);
+    var date = new Date();
+    if (_keyCode == 9) {
+        var dateExp = /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/;
+        var source = evt.getSource();
+        var dateId = source.getProperty("dateField");
+        var id = source.findComponent(dateId);
+
+        var msgId = source.getProperty("dateMsgField");
+        var msg = source.findComponent(msgId);
+        if (!id.getSubmittedValue() == "") {
+            if (!id.getSubmittedValue().match(dateExp)) {
+                //evt.cancel();
+                if (field != null) {
+                    msg.setMessage("Please enter a valid Date of Birth.");
+                }
+                else {
+                    msg.setMessage("Please enter a valid Date of Birth.");
+                }
+                AdfPage.PAGE.addPartialTrigger(msg);
+                //return null;
+            }
+        }
+    }
+    /*else{
+    msg.setMessage("");
+AdfPage.PAGE.addPartialTrigger(msg);
+}*/
+
+}
+
+function resetMsgFields(evt) {
+    var msgId = source.getProperty("msgField1");
+    var msg = source.findComponent(msgId);
+    msg.setMessage("");
+    AdfPage.PAGE.addPartialTrigger(msg);
+}
+
+//Added for defect
+function mobileValidation_paf(evt) {
+    var source = evt.getSource();
+    var moibleId = source.getProperty("mobileField");
+    var mobileNumber;
+    var msgId = source.getProperty("mobileMsgField");
+    var msg = source.findComponent(msgId);
+
+    mobileNumber = source.getValue();
+
+    if (mobileNumber == "") {
+        evt.cancel();
+        msg.setMessage("Please enter mobile number");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+
+    }
+    else if ((mobileNumber.length == 8) && ((mobileNumber.indexOf(8) == 0) || (mobileNumber.indexOf(9) == 0) || (mobileNumber.indexOf(3) == 0))) {
+        msg.setMessage("");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return true;
+
+    }
+    else {
+        evt.cancel();
+        msg.setMessage("Please enter a valid Local Mobile No.");
+
+        return null;
+    }
+}
+
+function fixedLineValidation_paf(evt) {
+    var source = evt.getSource();
+    var moibleId = source.getProperty("lineField");
+    var mobileNumber;
+    var msgId = source.getProperty("lineMsgField");
+    var msg = source.findComponent(msgId);
+
+    if (moibleId == null) {
+        mobileNumber = source.getValue();
+    }
+    else {
+        mobileNumber = source.findComponent(moibleId).getValue();
+    }
+    if ((mobileNumber.length == 8) && ((mobileNumber.indexOf(6) == 0))) {
+        msg.setMessage("");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return true;
+
+    }
+    else {
+        evt.cancel();
+        msg.setMessage("Please enter a valid Local Fixed line No!");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+}
+
+function mouseOutofDate(evt) {
+    var dateExp = /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/;
+    var source = evt.getSource();
+    var dateId = source.getProperty("dateField");
+    var field = source.getProperty("fieldName");
+    var id = source.findComponent(dateId);
+
+    var msgId = source.getProperty("dateMsgField");
+    var msg = source.findComponent(msgId);
+    if (!id.getSubmittedValue() == "") {
+        if (!id.getSubmittedValue().match(dateExp)) {
+            if (field != null) {
+                msg.setMessage("Please enter a valid " + field + ".");
+            }
+            else {
+                msg.setMessage("Please enter a valid date");
+            }
+            AdfPage.PAGE.addPartialTrigger(msg);
+
+        }
+        else {
+            msg.setMessage("");
+            AdfPage.PAGE.addPartialTrigger(msg);
+        }
+    }
+}
+
+function mouseOutofDateQiDOB(evt) {
+    var dateExp = /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/;
+    var source = evt.getSource();
+    var dateId = source.getProperty("dateField");
+    var field = source.getProperty("fieldName");
+    var id = source.findComponent(dateId);
+
+    var msgId = source.getProperty("dateMsgField");
+    var msg = source.findComponent(msgId);
+    if (!id.getSubmittedValue() == "") {
+        if (!id.getSubmittedValue().match(dateExp)) {
+            if (field != null) {
+                msg.setMessage("Please enter a valid Date of Birth.");
+            }
+            else {
+                msg.setMessage("Please enter a valid Date of Birth.");
+            }
+            AdfPage.PAGE.addPartialTrigger(msg);
+
+        }
+        else {
+            msg.setMessage("");
+            AdfPage.PAGE.addPartialTrigger(msg);
+        }
+    }
+}
+
+function mouseOutofDateFACourtEndDate(evt) {
+    var dateExp = /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/;
+    var source = evt.getSource();
+    var dateId = source.getProperty("dateField");
+    var field = source.getProperty("fieldName");
+    var id = source.findComponent(dateId);
+
+    var msgId = source.getProperty("dateMsgField");
+    var msg = source.findComponent(msgId);
+    if (!id.getSubmittedValue() == "") {
+        if (!id.getSubmittedValue().match(dateExp)) {
+            if (field != null) {
+                msg.setMessage("Please enter a valid end date.");
+            }
+            else {
+                msg.setMessage("Please enter a valid end date.");
+            }
+            AdfPage.PAGE.addPartialTrigger(msg);
+
+        }
+        else {
+            msg.setMessage("");
+            AdfPage.PAGE.addPartialTrigger(msg);
+        }
+    }
+}
+
+function mouseOutofDateFACourtStartDate(evt) {
+    var dateExp = /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/;
+    var source = evt.getSource();
+    var dateId = source.getProperty("dateField");
+    var field = source.getProperty("fieldName");
+    var id = source.findComponent(dateId);
+
+    var msgId = source.getProperty("dateMsgField");
+    var msg = source.findComponent(msgId);
+    if (!id.getSubmittedValue() == "") {
+        if (!id.getSubmittedValue().match(dateExp)) {
+            if (field != null) {
+                msg.setMessage("Please enter a valid Permission to act from start date.");
+            }
+            else {
+                msg.setMessage("Please enter a valid Permission to act from start date.");
+            }
+            AdfPage.PAGE.addPartialTrigger(msg);
+
+        }
+        else {
+            msg.setMessage("");
+            AdfPage.PAGE.addPartialTrigger(msg);
+        }
+    }
+}
+//Added for defect#8213
+function paRegfixedLineValidation(evt) {
+    var source = evt.getSource();
+    var moibleId = source.getProperty("lineField");
+    var mobileNumber;
+    var msgId = source.getProperty("lineMsgField");
+    var msg = source.findComponent(msgId);
+
+    if (moibleId == null) {
+        mobileNumber = source.getValue();
+    }
+    else {
+        mobileNumber = source.findComponent(moibleId).getValue();
+    }
+    if ((mobileNumber.length == 8) && ((mobileNumber.indexOf(6) == 0) || (mobileNumber.indexOf(8) == 0) || (mobileNumber.indexOf(3) == 0))) {
+        msg.setMessage("");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return true;
+
+    }
+    else {
+        evt.cancel();
+        msg.setMessage("Please Enter a valid Local Fixed Line No.");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+}
+
+function mobilevalidation(evt) {
+    var source = evt.getSource();
+    var moibleId = source.getProperty("lineField");
+    var mobileNumber;
+    var msgId = source.getProperty("lineMsgField");
+    var msg = source.findComponent(msgId);
+
+    if (moibleId == null) {
+        mobileNumber = source.getValue();
+    }
+    else {
+        mobileNumber = source.findComponent(moibleId).getValue();
+    }
+    var regex = /^[0-9]+$/;
+    if ((mobileNumber.length == 8) && ((mobileNumber.indexOf(6) == 0) || (mobileNumber.indexOf(3) == 0)) && mobileNumber.match(regex)) {
+        msg.setMessage("");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return true;
+    }
+    else {
+        evt.cancel();
+        msg.setMessage("Please Enter a valid Telephone No");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+}
+
+function pafDateValidation(evt) {
+    var date = new Date();
+    var curDate = date.getUTCDate();
+    var curMnt = date.getMonth() + 1;
+    var curYr = date.getUTCFullYear();
+    var dateExp = /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/;
+    var source = evt.getSource();
+    var dateId = source.getProperty("dateField");
+    var id = source.findComponent(dateId);
+    var msgId = source.getProperty("dateMsgField");
+    var msg = source.findComponent(msgId);
+
+    if (!id.getSubmittedValue().match(dateExp)) {
+        evt.cancel();
+        msg.setMessage("Please enter a valid Date");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+    var dt = id.getSubmittedValue().substring(0, 2);
+    var mnt = id.getSubmittedValue().substring(3, 5);
+    var yr = id.getSubmittedValue().substring(6, 10);
+    if (yr < 1900) {
+        evt.cancel();
+        msg.setMessage("Please enter a valid Date");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+    if (yr > curYr || (yr == curYr && mnt > curMnt) || (yr == curYr && mnt == curMnt && dt > curDate)) {
+        evt.cancel();
+        msg.setMessage("Date should not be a future date");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+    msg.setMessage("");
+    AdfPage.PAGE.addPartialTrigger(msg);
+}
+
+function pafnumbersandforwardslashOnly(evt) {
+
+    var _keyCode = evt.getKeyCode();
+    var _filterField = evt.getCurrentTarget();
+    var _oldValue = _filterField.getValue();
+    if (_keyCode == 16)
+        isShift = true;//else shiftkeydn=false;
+    if (isShift == true || ((_keyCode == 32) || (_keyCode > 64 && _keyCode < 91) || (_keyCode > 105 && _keyCode < 112) || (_keyCode > 185 && _keyCode < 190) || (_keyCode == 192 || _keyCode == 193) || (_keyCode > 218 && _keyCode < 223))) {
+        _filterField.setValue(_oldValue);
+        evt.cancel();
+    }
+    keychar = String.fromCharCode(_keyCode);
+    var date = new Date();
+    if (_keyCode == 9) {
+        var dateExp = /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/;
+        var source = evt.getSource();
+        var dateId = source.getProperty("dateField");
+        var id = source.findComponent(dateId);
+
+        var msgId = source.getProperty("dateMsgField");
+        var msg = source.findComponent(msgId);
+
+        if (!id.getSubmittedValue().match(dateExp)) {
+            //evt.cancel();
+            msg.setMessage("Please enter a valid date");
+            AdfPage.PAGE.addPartialTrigger(msg);
+            //return null;
+        }
+    }
+    /*else{
+    msg.setMessage("");
+AdfPage.PAGE.addPartialTrigger(msg);
+}*/
+
+}
+
+function alphaNumericWithSpaceHyphenSlashOnlyCommaDot(evt) {
+    var _keyCode = evt.getKeyCode();
+
+    var _filterField = evt.getCurrentTarget();
+    var _oldValue = _filterField.getValue();
+
+    if (_keyCode == 32 || _keyCode == 109 || _keyCode == 111 || _keyCode == 189 || _keyCode == 191 || _keyCode == 188 || _keyCode == 190)
+        return false;
+    if (_keyCode == 16)
+        isShift = true;//else shiftkeydn=false;
+    if (isShift == true || ((_keyCode > 105 && _keyCode < 112) || (_keyCode > 185 && _keyCode < 193) || (_keyCode > 218 && _keyCode < 223))) {
+        _filterField.setValue(_oldValue);
+        evt.cancel();
+    }
+    keychar = String.fromCharCode(_keyCode);
+}
+
+function validateProposedName(evt) {
+    var _keyCode = evt.getKeyCode();
+    var _filterField = evt.getCurrentTarget();
+    var _oldValue = _filterField.getValue();
+    if (_keyCode == 16)
+        isShift = true;//else shiftkeydn=false;
+    if ((isShift == true && (( _keyCode > 47 && _keyCode < 53) || (_keyCode > 53 && _keyCode < 58))) || (isShift == true && _keyCode == 48)){
+        return true;
+    }
+    if ((isShift == true && _keyCode == 53) || (isShift == true && _keyCode == 222)) {
+        _filterField.setValue(_oldValue);
+        evt.cancel();
+    }
+    if(_keyCode==192 && isShift != true) {
+         _filterField.setValue(_oldValue);
+         evt.cancel();
+    }
+    keychar = String.fromCharCode(_keyCode);
+
+}
+
+function validatePeoplePersonName(evt) {
+    var _keyCode = evt.getKeyCode();
+    var _filterField = evt.getCurrentTarget();
+    var _oldValue = _filterField.getValue();
+    //alert("_keyCode = "+_keyCode);
+    console.log("_keyCode = "+_keyCode);
+    if (_keyCode == 16)
+        isShift = true;//else shiftkeydn=false;
+        //(isShift == true && ((_keyCode > 47 && _keyCode < 53) || (_keyCode > 53 && _keyCode < 58))) || 
+    if ((isShift == true && _keyCode == 57) || (isShift == true && _keyCode == 173) || (isShift == true && _keyCode == 188) || (isShift == true && _keyCode == 190) || (isShift == true && _keyCode == 191) || (isShift == true && _keyCode == 50) || (isShift == true && _keyCode == 48) || (isShift == true && _keyCode == 222))
+        return true;
+    if ((isShift == true && _keyCode == 53) || (isShift == true && ((_keyCode > 47 && _keyCode < 53) || (_keyCode > 53 && _keyCode < 58) || (_keyCode > 189 && _keyCode < 193) || _keyCode==173 || _keyCode==188)) || (_keyCode > 218 && _keyCode < 222) || (_keyCode==59) || (_keyCode==61)) {
+        _filterField.setValue(_oldValue);
+        evt.cancel();
+    }
+    if(_keyCode==192 && isShift != true) {
+         _filterField.setValue(_oldValue);
+         evt.cancel();
+    }
+    keychar = String.fromCharCode(_keyCode);
+
+}
+
+
+
+//End here
+function emailValidationDSA(evt) {
+ var t,
+  a = e.getSource(),
+  n = a.getProperty('emailField'),
+  r = a.getProperty('emailMsgField'),
+//  g = a.getProperty('fieldName'),
+  l = a.findComponent(r),
+  i = /^[_A-Za-z0-9-]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{1,})$/;
+  t = null == n ? a.getValue()  : a.findComponent(n).getValue();
+  if (t.length <= 320) {
+    return t = null == n ? a.getValue()  : a.findComponent(n).getValue(),
+    t.match(i) ? (l.setMessage(''), AdfPage.PAGE.addPartialTrigger(l), !0)  : 0 !== t.length ? (e.cancel(), l.setMessage("Please enter a valid Email Address."), AdfPage.PAGE.addPartialTrigger(l), null)  : void l.setMessage('')
+  } else {
+    e.cancel(),
+    l.setMessage("Please enter a valid Email Address."),
+    AdfPage.PAGE.addPartialTrigger(l);
+  }
+}
+
+function paRegNameValidation(evt) {
+    var _keyCode = evt.getKeyCode();
+
+    var _filterField = evt.getCurrentTarget();
+    var _oldValue = _filterField.getValue();
+    //alert(_keyCode);
+    if (_keyCode == 16) {
+        isShift = true;
+    }
+    else {
+        shiftkeydn = false;
+    }
+    //else shiftkeydn=false;
+    if ((_keyCode > 36 && _keyCode < 41) || (_keyCode > 45 && _keyCode < 58 && _keyCode != 53) || ((shiftkeydn == false && isShift != true && _keyCode == 53)) || _keyCode == 8 || _keyCode == 9 || _keyCode == 59 || _keyCode == 61 || (_keyCode > 64 && _keyCode < 91) || _keyCode == 32 || _keyCode == 106 || _keyCode == 107 || _keyCode == 109 || _keyCode == 110 || _keyCode == 111 || _keyCode == 173 || _keyCode == 189 || _keyCode == 191 || _keyCode == 192 || _keyCode == 186 || _keyCode == 187 || _keyCode == 188 || _keyCode == 189 || _keyCode == 190 || _keyCode == 191 || _keyCode == 222 || _keyCode == 219 || _keyCode == 221 || _keyCode == 220)
+        return false;
+
+    if ((isShift == true && _keyCode == 61) || (isShift == true && _keyCode == 59) || (isShift == true && _keyCode == 173) || (isShift == true && (_keyCode > 47 && _keyCode < 58 && _keyCode != 53)) || (isShift == true && (_keyCode > 185 && _keyCode < 190))) {
+        return false;
+    }
+    else {
+        //alert(_keyCode);
+        _filterField.setValue(_oldValue);
+        evt.cancel();
+    }
+
+    keychar = String.fromCharCode(_keyCode);
+}
+
+function personNameValidation(evt) {
+    var _keyCode = evt.getKeyCode();
+
+    var _filterField = evt.getCurrentTarget();
+    var _oldValue = _filterField.getValue();
+    //alert(_keyCode);
+    if (_keyCode == 16) {
+        isShift = true;
+    }
+    else {
+        shiftkeydn = false;
+    }
+    if (_keyCode == 32) {
+        return true;
+    }
+    //else shiftkeydn=false;
+    if (isShift == false && (_keyCode == 191 || _keyCode == 190 || _keyCode == 188 || _keyCode == 189 || _keyCode == 222 || _keyCode == 8 || _keyCode == 46 || (_keyCode > 47 && _keyCode < 58) || (_keyCode > 64 && _keyCode < 106)))
+
+        return true;
+
+    else if ((isShift == true && _keyCode == 50) || (isShift == true && _keyCode == 57) || (isShift == true && _keyCode == 48) || (isShift == true && _keyCode == 222))
+
+        return true;
+    else {
+        //alert(_keyCode);
+        _filterField.setValue(_oldValue);
+        evt.cancel();
+    }
+
+    // keychar = String.fromCharCode(_keyCode);
+}
+
+function numbersandforwardslashOnlyIRAS(evt) {
+
+    var _keyCode = evt.getKeyCode();
+
+    var _filterField = evt.getCurrentTarget();
+    var _oldValue = _filterField.getValue();
+    if (_keyCode == 16)
+        isShift = true;//else shiftkeydn=false;
+    if (isShift == true || ((_keyCode == 32) || (_keyCode > 64 && _keyCode < 91) || (_keyCode > 105 && _keyCode < 112) || (_keyCode > 185 && _keyCode < 190) || (_keyCode == 192 || _keyCode == 193) || (_keyCode > 218 && _keyCode < 223))) {
+        _filterField.setValue(_oldValue);
+        evt.cancel();
+    }
+    keychar = String.fromCharCode(_keyCode);
+    var date = new Date();
+    if (_keyCode == 9) {
+        var dateExp = /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/;
+        var source = evt.getSource();
+        var dateId = source.getProperty("dateField");
+        var dateId1 = source.getProperty("dateField1");
+        var dateId2 = source.getProperty("dateField2");/*0*/
+        var id = source.findComponent(dateId);
+        var id1 = source.findComponent(dateId1);/*m3*/
+        var msgId = source.getProperty("dateMsgField");
+        var msg = source.findComponent(msgId);
+        if (!id.getSubmittedValue() == "") {
+            if (!id.getSubmittedValue().match(dateExp)) {
+                //evt.cancel();
+                msg.setMessage("Please enter a valid Date.");
+                if (dateId2 == 0) {
+                    id1.setMessage("");
+
+                }
+                AdfPage.PAGE.addPartialTrigger(msg);
+                //return null;
+            }
+        }
+    }
+    /*else{
+    msg.setMessage("");
+AdfPage.PAGE.addPartialTrigger(msg);
+}*/
+
+}
+
+function mouseOutofDateIRAS(evt) {
+
+    var dateExp = /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/;
+    var source = evt.getSource();
+    var dateId = source.getProperty("dateField");
+    var dateId1 = source.getProperty("dateField1");
+    var dateId2 = source.getProperty("dateField2");
+    var id = source.findComponent(dateId);
+    var id1 = source.findComponent(dateId1);
+    var msgId = source.getProperty("dateMsgField");
+    var msg = source.findComponent(msgId);
+    if (!id.getSubmittedValue() == "") {
+
+        if (!id.getSubmittedValue().match(dateExp)) {
+            msg.setMessage("Please enter a valid Date.");
+            if (dateId2 == 0) {
+                id1.setMessage("");
+
+            }
+            AdfPage.PAGE.addPartialTrigger(msg);
+
+        }
+        else {
+            msg.setMessage("");
+            AdfPage.PAGE.addPartialTrigger(msg);
+
+        }
+
+    }
+}
+
+function eightyneenEightyEight(evt) {
+    var source = evt.getSource();
+    var dateId = source.getProperty("dateField");
+    var id = source.findComponent(dateId);
+    var field = source.getProperty("fieldName");
+    var msgId = source.getProperty("dateMsgField");
+    var msg = source.findComponent(msgId)
+    var yr = id.getSubmittedValue().substring(6, 10);
+    if (yr < 1900) {
+        evt.cancel();
+        msg.setMessage("Please enter a valid date." + field + "must be later than 1900");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+    msg.setMessage("");
+    AdfPage.PAGE.addPartialTrigger(msg);
+}
+
+function spaceAndnumbersOnly(evt) {
+
+    var _keyCode = evt.getKeyCode();
+
+    var _filterField = evt.getCurrentTarget();
+    var _oldValue = _filterField.getValue();
+    if (_keyCode == 16)
+        isShift = true;//else shiftkeydn=false;
+    if (isShift == true || ((_keyCode > 64 && _keyCode < 91) || (_keyCode > 105 && _keyCode < 112) || (_keyCode > 185 && _keyCode < 193) || (_keyCode > 218 && _keyCode < 223))) {
+        _filterField.setValue(_oldValue);
+        evt.cancel();
+    }
+    keychar = String.fromCharCode(_keyCode);
+
+}
+
+//for effective date change
+function effstartDateValidation(evt) {
+    var comp = evt.getSource();
+
+    AdfPage.PAGE.clearMessages(comp.getClientId());
+
+    var date = new Date();
+    var curDate = date.getUTCDate();
+    var curMnt = date.getMonth() + 1;
+    var curYr = date.getUTCFullYear();
+    var dateExp = /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/;
+    var source = evt.getSource();
+    var dateId = source.getProperty("dateField");
+    var id = source.findComponent(dateId);
+    var msgId = source.getProperty("dateMsgField");
+    var msg = source.findComponent(msgId);
+
+    if (!id.getSubmittedValue().match(dateExp)) {
+        evt.cancel();
+        msg.setMessage("Please enter a valid Effective Date Of Change.");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+    var dt = id.getSubmittedValue().substring(0, 2);
+    var mnt = id.getSubmittedValue().substring(3, 5);
+    var yr = id.getSubmittedValue().substring(6, 10);
+    if (yr < 1900) {
+        evt.cancel();
+        msg.setMessage("Please enter a valid Effective Date Of Change.");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+    if (yr > curYr || (yr == curYr && mnt > curMnt) || (yr == curYr && mnt == curMnt && dt > curDate)) {
+        evt.cancel();
+        msg.setMessage("Please enter a valid date. Effective Date Of Change must be an earlier date.");
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+    msg.setMessage("");
+    AdfPage.PAGE.addPartialTrigger(msg);
+}
+
+function validateDateValues(id) {
+    //Test which seperator is used '/' or '-'
+    var opera1 = id.getSubmittedValue().split('/');
+    lopera1 = opera1.length;
+    // Extract the string into month, date and year
+    if (lopera1 > 1) {
+        var pdate = id.getSubmittedValue().split('/');
+    }
+    //alert(parseInt(pdate[1],10)+"-----"+pdate[1])
+    var dd = parseInt(pdate[0], 10);
+    var mm = parseInt(pdate[1], 10);
+    var yy = parseInt(pdate[2], 10);
+    // Create list of days of a month [assume there is no leap year by default]
+    var ListofDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    var months = ['January', 'Febrauary', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    if (mm == 2) {
+        if ((!(yy % 4) && yy % 100) || !(yy % 400))
+            ListofDays[1] = 29;
+    }
+    //alert(dd+"----"+mm+"-----"+ListofDays[mm-1])
+    if (dd > ListofDays[mm - 1]) {
+        alert('Invalidate for :' + months[mm - 1]);
+        return false;
+    }
+}
+
+//To validate charge amount fields for 16,2
+function validateChargeAmtValue(evt) {
+    var source = evt.getSource();
+    var _keyCode = evt.getKeyCode();
+    var clientId = source.getClientId();
+    clientId = clientId + '::content';
+    var unitposition;
+    var shareStr1;
+    var shareStr2;
+    var shareField = document.getElementById(clientId);
+    var shareNo = shareField.value;
+    var resultV;
+    var regex = new RegExp("^(\\d{0,14}(\\.\\d{0,2})?|\\d{0,14})$");
+    AdfPage.PAGE.clearAllMessages();
+    //Backspace, Right and Left Arrow
+    if (_keyCode == 8 || _keyCode == 37 || _keyCode == 39) {
+        return true;
+    }
+    //For Decimal
+     if(isShift==true){
+          evt.cancel();
+       }else if (_keyCode == 110 || _keyCode == 190) {
+        if (shareNo != null) {
+            unitposition = document.getElementById(evt.getSource().getClientId() + "::content").selectionStart;
+            console.log(unitposition);
+            shareStr1 = shareNo.substr(0, unitposition);
+            shareStr2 = shareNo.substr(unitposition);
+            shareNo = shareStr1 + String.fromCharCode(46) + shareStr2;
+        }
+        else {
+            shareNo = String.fromCharCode(46);
+        }
+        if(shareNo == String.fromCharCode(46)){        
+            AdfPage.PAGE.addMessage(clientId, new AdfFacesMessage(AdfFacesMessage.TYPE_ERROR, "Invalid Value", "Please enter a valid Amount Satisfied."));
+            AdfPage.PAGE.showMessages(clientId);
+            event.cancel();           
+        }
+
+        //console.log(shareNo);
+        resultV = regex.test(shareNo);
+
+        if (resultV) {
+            //console.log(resultV);
+            return true;
+        }
+        else {
+            //console.log("Else "+resultV);
+            evt.cancel();
+        }
+    }
+    else {    
+        if (_keyCode == 16) {
+            isShift = true;
+        }
+        if (isShift == true || ((_keyCode == 32) || (_keyCode > 64 && _keyCode < 91) || (_keyCode > 105 && _keyCode < 112) || (_keyCode > 185 && _keyCode < 193) || (_keyCode > 218 && _keyCode < 223))) {
+            //console.log("Not Valid");
+            evt.cancel();
+            return false;
+        }
+
+        if (shareNo != null){
+            unitposition = document.getElementById(evt.getSource().getClientId() + "::content").selectionStart;
+            //console.log(unitposition);
+            shareStr1 = shareNo.substr(0, unitposition);
+            shareStr2 = shareNo.substr(unitposition);
+            shareNo = shareStr1 + String.fromCharCode((96 <= _keyCode && _keyCode <= 105) ? _keyCode - 48 : _keyCode) + shareStr2;
+        }   
+        else
+            shareNo = String.fromCharCode((96 <= _keyCode && _keyCode <= 105) ? _keyCode - 48 : _keyCode);
+
+        //console.log(shareNo);
+        resultV = regex.test(shareNo);
+        if (resultV) {
+            //console.log(resultV);
+            return true;
+        }
+        else {
+            //console.log("Else "+resultV);
+            evt.cancel();
+        }
+    }
+}
+
+//To validate Amount Series fields for 12,2
+function validateAmountSeriesValue(evt) {
+    var source = evt.getSource();
+    var _keyCode = evt.getKeyCode();
+    var clientId = source.getClientId();
+    clientId = clientId + '::content';
+    var unitposition;
+    var shareStr1;
+    var shareStr2;
+    var shareField = document.getElementById(clientId);
+    var shareNo = shareField.value;
+    var resultV;
+    var regex = new RegExp("^(\\d{0,10}(\\.\\d{0,2})?|\\d{0,10})$");
+    //Backspace, Right and Left Arrow
+    if (_keyCode == 8 || _keyCode == 37 || _keyCode == 39) {
+        return true;
+    }
+    //For Decimal
+     if(isShift==true){
+          evt.cancel();
+       }else if (_keyCode == 110 || _keyCode == 190) {
+        if (shareNo != null) {
+            unitposition = document.getElementById(evt.getSource().getClientId() + "::content").selectionStart;
+            console.log(unitposition);
+            shareStr1 = shareNo.substr(0, unitposition);
+            shareStr2 = shareNo.substr(unitposition);
+            shareNo = shareStr1 + String.fromCharCode(46) + shareStr2;
+        }
+        else {
+            shareNo = String.fromCharCode(46);
+        }
+
+        //console.log(shareNo);
+        resultV = regex.test(shareNo);
+
+        if (resultV) {
+            //console.log(resultV);
+            return true;
+        }
+        else {
+            //console.log("Else "+resultV);
+            evt.cancel();
+        }
+    }
+    else {
+        if (_keyCode == 16) {
+            isShift = true;
+        }
+        if (isShift == true || ((_keyCode == 32) || (_keyCode > 64 && _keyCode < 91) || (_keyCode > 105 && _keyCode < 112) || (_keyCode > 185 && _keyCode < 193) || (_keyCode > 218 && _keyCode < 223))) {
+            //console.log("Not Valid");
+            evt.cancel();
+            return false;
+        }
+
+        if (shareNo != null){
+            unitposition = document.getElementById(evt.getSource().getClientId() + "::content").selectionStart;
+            //console.log(unitposition);
+            shareStr1 = shareNo.substr(0, unitposition);
+            shareStr2 = shareNo.substr(unitposition);
+            shareNo = shareStr1 + String.fromCharCode((96 <= _keyCode && _keyCode <= 105) ? _keyCode - 48 : _keyCode) + shareStr2;
+        }    
+        else
+            shareNo = String.fromCharCode((96 <= _keyCode && _keyCode <= 105) ? _keyCode - 48 : _keyCode);
+
+        //console.log(shareNo);
+        resultV = regex.test(shareNo);
+        if (resultV) {
+            //console.log(resultV);
+            return true;
+        }
+        else {
+            //console.log("Else "+resultV);
+            evt.cancel();
+        }
+    }
+}
+//To validate Amount Percentage for lodgement fields for 5,2
+function validateAmountPercentValue(evt) {
+    var source = evt.getSource();
+    var _keyCode = evt.getKeyCode();
+    var clientId = source.getClientId();
+    clientId = clientId + '::content';
+    var shareField = document.getElementById(clientId);
+    var shareNo = shareField.value;
+    var resultV;
+    var regex = new RegExp("^(\\d{0,3}(\\.\\d{0,2})?|\\d{0,3})$");
+    //Backspace, Right and Left Arrow
+    if (_keyCode == 8 || _keyCode == 37 || _keyCode == 39) {
+        return true;
+    }
+    //For Decimal
+     if(isShift==true){
+          evt.cancel();
+       }else if (_keyCode == 110 || _keyCode == 190) {
+        if (shareNo != null) {
+            unitposition = document.getElementById(evt.getSource().getClientId() + "::content").selectionStart;
+            console.log(unitposition);
+            shareStr1 = shareNo.substr(0, unitposition);
+            shareStr2 = shareNo.substr(unitposition);
+            shareNo = shareStr1 + String.fromCharCode(46) + shareStr2;
+        }
+        else {
+            shareNo = String.fromCharCode(46);
+        }
+
+        //console.log(shareNo);
+        resultV = regex.test(shareNo);
+
+        if (resultV) {
+            //console.log(resultV);
+            return true;
+        }
+        else {
+            //console.log("Else "+resultV);
+            evt.cancel();
+        }
+    }
+    else {
+        if (_keyCode == 16) {
+            isShift = true;
+        }
+        if (isShift == true || ((_keyCode == 32) || (_keyCode > 64 && _keyCode < 91) || (_keyCode > 105 && _keyCode < 112) || (_keyCode > 185 && _keyCode < 193) || (_keyCode > 218 && _keyCode < 223))) {
+            //console.log("Not Valid");
+            evt.cancel();
+            return false;
+        }
+
+       if (shareNo != null){
+            unitposition = document.getElementById(evt.getSource().getClientId() + "::content").selectionStart;
+            //console.log(unitposition);
+            shareStr1 = shareNo.substr(0, unitposition);
+            shareStr2 = shareNo.substr(unitposition);
+            shareNo = shareStr1 + String.fromCharCode((96 <= _keyCode && _keyCode <= 105) ? _keyCode - 48 : _keyCode) + shareStr2;
+        }   
+        else
+            shareNo = String.fromCharCode((96 <= _keyCode && _keyCode <= 105) ? _keyCode - 48 : _keyCode);
+        //console.log(shareNo);
+        resultV = regex.test(shareNo);
+        if (resultV) {
+            //console.log(resultV);
+            return true;
+        }
+        else {
+            //console.log("Else "+resultV);
+            evt.cancel();
+        }
+    }
+}
+
+// this function is for remove server side errors on client side validation componets
+function handleCustomServerEvent(evt) {
+    var source = evt.getSource();
+    var key = source.getProperty("key");
+    console.log("key=", key)
+    console.log("key check=", (key != null))
+    if (key != null) {
+        AdfCustomEvent.queue(source, "CustomServerEvent",
+        {
+            key : key
+        },
+false);
+    }
+}
+
+function bankruptcy(evt) {
+
+    var _keyCode = evt.getKeyCode();
+
+    var _filterField = evt.getCurrentTarget();
+    var _oldValue = _filterField.getValue();
+    if (_keyCode == 16)
+        isShift = true;//else shiftkeydn=false;
+    if (isShift == true || ((_keyCode == 32) || (_keyCode > 105 && _keyCode < 112) || (_keyCode > 185 && _keyCode < 193) || (_keyCode > 218 && _keyCode < 223) || (_keyCode == 173) || (_keyCode == 61) || (_keyCode == 59))) {
+        _filterField.setValue(_oldValue);
+        evt.cancel();
+    }
+    keychar = String.fromCharCode(_keyCode);
+}
+
+function showremaining_paExemp(evt) {
+    var source = evt.getSource();
+    var outField1 = source.getProperty("outField");
+    var maxlimit = parseInt(source.getProperty("maxLength"), 1000);
+    maxlimit = 1000;
+    var outputLabelForMsg = source.findComponent(outField1);
+    if (source.getValue() != 'null') {
+        if (source.getSubmittedValue().length > maxlimit) {
+            source.setValue(source.getSubmittedValue().substring(0, maxlimit));
+            if (maxlimit - (source.getSubmittedValue().length) > 0) {
+                outputLabelForMsg.setValue(" Characters Left :" + (maxlimit - (source.getSubmittedValue().length)));
+            }
+        }
+        else {
+            outputLabelForMsg.setValue(" Characters Left :" + (maxlimit - (source.getSubmittedValue().length)));
+        }
+        AdfPage.PAGE.addPartialTrigger(source);
+        AdfPage.PAGE.addPartialTrigger(outputLabelForMsg);
+    }
+
+}
+
+function clearPrevErrMsgs(evt) {
+    var beComp = evt.getSource().findComponent(evt.getSource().getProperty("beMsgId"));
+    var feComp = evt.getSource().findComponent(evt.getSource().getProperty("feMsgId"));
+    var selfComp = evt.getSource().findComponent(evt.getSource().getProperty("compId"));
+    if (selfComp != null && selfComp.getProperty("valid") && feComp != null) {
+        feComp.setMessage("");
+    }
+    else {
+        if (beComp != null)
+            beComp.setVisible(false);
+    }
+}
+
+function populateRemChars(evt){
+    var compToCount = evt.getSource();
+    var displayComp = evt.getSource().findComponent(compToCount.getProperty("counterId"));
+    var maxLength = compToCount.getProperty("maxLength");
+    var currLength = compToCount.getSubmittedValue() != null ? compToCount.getSubmittedValue().length : 0;
+    var counterPrefix = compToCount.getProperty("counterPrefix");
+    var disp = counterPrefix + (maxLength - currLength);
+    
+    displayComp.setValue(disp);
+
+}
+
+function populateRemCharsByDOM(evt){
+    var compToCount = evt.getSource();
+    var displayComp = document.getElementById(evt.getSource().getClientId().
+                            replace(evt.getSource().getId(),compToCount.getProperty("counterId")));
+    var maxLength = compToCount.getProperty("maxLength");
+    var currLength = compToCount.getSubmittedValue() != null ? compToCount.getSubmittedValue().length : 0;
+    var counterPrefix = compToCount.getProperty("counterPrefix");
+    var disp = counterPrefix + (maxLength - currLength);
+    
+    displayComp.childNodes[0].nodeValue = disp;
+}
+
+
+function disableEvent(evt){
+     evt.cancel();
+}
+
+function clearMsgComp(evt) {
+    var msgComp = evt.getSource().findComponent(evt.getSource().getProperty("msgId"));
+    if (msgComp != null ) {
+        msgComp.setVisible(false);
+    }
+}
+
+//Allow only alphaNumerics and Spaces,Hyphen(-) and special character “-“, “@”, “&”,“(“ , “)”,” ‘ “
+//CQAS Rule Doc.
+//11.	NGB_TIS_RS_CQAS_011
+//All description/remarks fields
+//Example: “ Description of Principals/Beneficiaries” and  “Remarks by Approva Authority” 
+//a) cannot accept special characters except for “-“, “@”, “&”,“(“ , “)”,” ‘ “
+//b) Include spelling check for fields that allow user to enter free text
+//In NGB system, for all description/remarks field, there will not be any restriction on the special characters. Also, there will be no need to do a spell check (ACRA confirmed during CQAS requirement meeting) on free text fields as it would require customizations and 3rd party tool integrations.	All
+
+function allDescriptionRemarksTextAreaValidation(evt) {
+    var _keyCode = evt.getKeyCode();
+
+    var _filterField = evt.getCurrentTarget();
+    var _oldValue = _filterField.getValue();
+
+    if (_keyCode == 32 || _keyCode == 109 || _keyCode == 111 || (isShift == false && _keyCode == 189) || _keyCode == 48 || _keyCode == 57 || _keyCode == 50 || _keyCode == 55 || _keyCode == 110 || _keyCode == 55 ||  (isShift == false && _keyCode == 222))
+        return true;
+    if (_keyCode == 16)
+        isShift = true;//else shiftkeydn=false;
+    if (isShift == true || ((_keyCode == 59) ||(_keyCode == 61) || (_keyCode > 105 && _keyCode < 112) || (_keyCode > 185 && _keyCode < 193) || (_keyCode > 218 && _keyCode < 223))) {
+        _filterField.setValue(_oldValue);
+        evt.cancel();
+    }
+    keychar = String.fromCharCode(_keyCode);
+}
+
+function validateOfficerName(evt) {
+    var _keyCode = evt.getKeyCode();
+
+    var _filterField = evt.getCurrentTarget();
+    var _oldValue = _filterField.getValue();
+    if (_keyCode == 16)
+        isShift = true;//else shiftkeydn=false;
+    if ((isShift == true && ((_keyCode > 49 && _keyCode < 53) || (_keyCode > 53 && _keyCode < 58))) || (isShift == true && _keyCode == 48))
+        return true;
+    if ((isShift == true && _keyCode == 49) || (isShift == true && _keyCode == 53) || (_keyCode > 47 && _keyCode < 58) || (_keyCode > 95 && _keyCode < 106)) {
+        _filterField.setValue(_oldValue);
+        evt.cancel();
+    }
+    keychar = String.fromCharCode(_keyCode);
+
+}
+function clkcharacterCounter(evt) {
+ 
+     var source=evt.getSource();
+
+  var outField1=source.getProperty("outField");
+   
+     var maxlimit= parseInt(source.getProperty("maxLength"),10);
+   var outputLabelForMsg=source.findComponent(outField1);
+
+    if(source.getSubmittedValue()!='null') {
+    if (source.getSubmittedValue().trim().length == 0 ) {
+    source.setValue("");
+    source.setSubmittedValue("");
+    outputLabelForMsg.setValue(" Characters Left :"+ (maxlimit - (source.getSubmittedValue().trim().length)));
+    }
+    AdfPage.PAGE.addPartialTrigger(source);
+    AdfPage.PAGE.addPartialTrigger(outputLabelForMsg);
+    }
+
+//o.setValue(characterCounterValue);
+//o.setValue(characterCounterValue);
+}
+//for payment 
+
+function printPartOfPage(elementId)
+{
+ var printContent = document.getElementById(elementId);
+ var windowUrl = 'about:blank';
+ var uniqueName = new Date();
+ var windowName = 'Print' + uniqueName.getTime();
+ var printWindow = window.open(windowUrl, windowName, 'left=50000,top=50000,width=0,height=0');
+
+ printWindow.document.write(printContent.innerHTML);
+ printWindow.document.close();
+ printWindow.focus();
+ printWindow.print();
+ printWindow.close();
+}
+
+
+function charChecker(evt){   
+    textfield = evt.getCurrentTarget();  
+    textfield_current_content = textfield.getSubmittedValue();  
+    textfield_current_content_length =   textfield_current_content.length;
+    maxLength = textfield.getMaximumLength(); 
+    
+    var outputClientId = evt.getSource().findComponent(evt.getSource().getProperty("outputField")).getClientId();     
+    counter = AdfPage.PAGE.findComponentByAbsoluteId(outputClientId);      
+    counter_value = counter.getValue();    
+    if (maxLength-textfield_current_content_length<=maxLength &&  maxLength-textfield_current_content_length>0){   
+        counter_value = maxLength-textfield_current_content_length-1; 
+    }  
+    else{ 
+        if(evt.getKeyCode()!= AdfKeyStroke.BACKSPACE_KEY   && 
+        evt.getKeyCode()!= AdfKeyStroke.TAB_KEY  && 
+        evt.getKeyCode()!= AdfKeyStroke.DELETE_KEY  && 
+        evt.getKeyCode()!= AdfKeyStroke.ARROWLEFT_KEY  && 
+        evt.getKeyCode()!= AdfKeyStroke.ARROWUP_KEY  && 
+        evt.getKeyCode()!= AdfKeyStroke.ARROWRIGHT_KEY  && 
+        evt.getKeyCode()!= AdfKeyStroke.ARROWDOWN_KEY)  
+        {  
+            evt.cancel();
+        } 
+    }     
+    counter.setValue(counter_value);  
+}
+function futureDateValidationNew(evt) {
+    var date = new Date();
+    var curDate = date.getUTCDate();
+    var curMnt = date.getMonth() + 1;
+    var curYr = date.getUTCFullYear();
+    var dateExp = /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/;
+    var source = evt.getSource();
+    var dateId = source.getProperty("dateField");
+    var id = source.findComponent(dateId);
+    var msgId = source.getProperty("dateMsgField");
+    var msg = source.findComponent(msgId);
+    var field = source.getProperty("fieldName");
+    if (id.getSubmittedValue() == "") {
+        evt.cancel();
+//        msg.setMessage("");
+//        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+    if (!id.getSubmittedValue().match(dateExp)) {
+        evt.cancel();
+        if (field != null) {
+            msg.setMessage("Please enter a valid " + field + "");
+        }
+        else {
+            msg.setMessage("Please enter a valid  " + field + "");
+        }
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+    var dt = id.getSubmittedValue().substring(0, 2);
+    var mnt = id.getSubmittedValue().substring(3, 5);
+    var yr = id.getSubmittedValue().substring(6, 10);
+    if (yr < 1900) {
+        evt.cancel();
+        if (field != null) {
+            msg.setMessage("Please enter a valid " + field + ".");
+        }
+        else {
+            msg.setMessage("Please enter a valid date."+ field + " must be greater than 1900");
+        }
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+    if (yr > curYr || (yr == curYr && mnt > curMnt) || (yr == curYr && mnt == curMnt && dt > curDate)) {
+        evt.cancel();
+        if (field != null) {
+            msg.setMessage("Please enter a valid date. " + field + " must be an earlier date.");
+        }
+        else {
+            msg.setMessage("Please enter a valid date."+ field + " must be a future date");
+        }
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+    msg.setMessage("");
+    AdfPage.PAGE.addPartialTrigger(msg);
+}
+
+function pafAppointmentDate(evt) {
+    //This script is only for PAF Name application. Do not change this for other transaction requirement.
+    var date = new Date();
+    var curDate = date.getUTCDate();
+    var curMnt = date.getMonth() + 1;
+    var curYr = date.getUTCFullYear();
+    var dateExp = /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/;
+    var source = evt.getSource();
+    var dateId = source.getProperty("dateField");
+    var id = source.findComponent(dateId);
+    var msgId = source.getProperty("dateMsgField");
+    var msg = source.findComponent(msgId);
+    var field = source.getProperty("fieldName");
+    if (id.getSubmittedValue() == "") {
+        evt.cancel();
+//        msg.setMessage("");
+//        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+    if (!id.getSubmittedValue().match(dateExp)) {
+        evt.cancel();
+        if (field != null) {
+            msg.setMessage("Please enter a valid " + field + "");
+        }
+        else {
+            msg.setMessage("Date entered is invalid.");
+        }
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+    var dt = id.getSubmittedValue().substring(0, 2);
+    var mnt = id.getSubmittedValue().substring(3, 5);
+    var yr = id.getSubmittedValue().substring(6, 10);
+    if (yr < 1900) {
+        evt.cancel();
+        if (field != null) {
+            msg.setMessage("Please enter a valid " + field + ".");
+        }
+        else {
+            msg.setMessage("Year Should be Greater than 1900.");
+        }
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+    if (yr != curYr || mnt != curMnt || dt != curDate) {
+        evt.cancel();
+        if (field != null) {
+            msg.setMessage("Please enter a valid date. " + field + " must be a current date.");
+        }
+        else {
+            msg.setMessage("Date must be a current date.");
+        }
+        AdfPage.PAGE.addPartialTrigger(msg);
+        return null;
+    }
+    msg.setMessage("");
+    AdfPage.PAGE.addPartialTrigger(msg);
+}
+
+function preparemousedown(event) {
+alert('You are not authorised to perform this action');
+ event.cancel();
+ //return false;
+ }
+var logoutAction = 0
+function prepareLogout(event) {
+        
+            logoutAction = 1;
+          
+        }
+
+function prsnNameValidation(evt) {
+    var _keyCode = evt.getKeyCode();
+
+    var _filterField = evt.getCurrentTarget();
+    var _oldValue = _filterField.getValue();
+    //alert(_keyCode);
+    if (_keyCode == 16) {
+        isShift = true;
+    }
+    else {
+        shiftkeydn = false;
+    }
+    //else shiftkeydn=false;
+    if ((_keyCode > 36 && _keyCode < 41) || (_keyCode > 45 && _keyCode < 48) || _keyCode == 8 || _keyCode == 9 || _keyCode == 59 || _keyCode == 61 || (_keyCode > 64 && _keyCode < 91) || _keyCode == 32 || _keyCode == 106 || _keyCode == 107 || _keyCode == 109 || _keyCode == 110 || _keyCode == 111 || _keyCode == 173 || _keyCode == 189 || _keyCode == 191 || _keyCode == 192 || _keyCode == 186 || _keyCode == 187 || _keyCode == 188 || _keyCode == 189 || _keyCode == 190 || _keyCode == 191 || _keyCode == 222 || _keyCode == 219 || _keyCode == 221 || _keyCode == 220)
+        return false;
+
+    if ((isShift == true && _keyCode == 61) || (isShift == true && _keyCode == 59) || (isShift == true && _keyCode == 173) || (isShift == true && (_keyCode > 47 && _keyCode < 58 && _keyCode != 53)) || (isShift == true && (_keyCode > 185 && _keyCode < 190))) {
+        return false;
+    }
+    else {
+        //alert(_keyCode);
+        _filterField.setValue(_oldValue);
+        evt.cancel();
+    }
+
+    keychar = String.fromCharCode(_keyCode);
+}
+
+function validateUnitNew(evt) {
+    var _keyCode = evt.getKeyCode();
+    var unitposition = document.getElementById(evt.getSource().getClientId()+"::content").selectionStart
+    var modifier = evt.getKeyModifiers();
+   // alert(modifier!=AdfKeyStroke.SHIFT_MASK && unitposition >0) ;        
+    if(modifier!=AdfKeyStroke.SHIFT_MASK && unitposition >=0 && (_keyCode == 189 || _keyCode == 191 || _keyCode == 59 || _keyCode == 173 || _keyCode == 191 || _keyCode == 189 || _keyCode == 188 || _keyCode == 186 || _keyCode == 111 || _keyCode == 109)) {    
+        return true;
+    }    
+     else if (modifier==AdfKeyStroke.SHIFT_MASK || ((_keyCode == 32)|| (_keyCode == 59)|| (_keyCode == 173)|| (_keyCode > 105 && _keyCode < 109)||(_keyCode==110)|| (_keyCode > 185 && _keyCode < 193) || (_keyCode > 218 && _keyCode < 223) )) {        
+        evt.cancel();
+    }
+    keychar = String.fromCharCode(_keyCode);
+}
+
+//Allow only Numbers
+function validateLevel(evt) {
+    var _keyCode = evt.getKeyCode();
+    var modifier = evt.getKeyModifiers();
+    var _filterField = evt.getCurrentTarget();
+    var _oldValue = _filterField.getValue();
+    
+    if (modifier == AdfKeyStroke.SHIFT_MASK || ((_keyCode == 32) || (_keyCode > 64 && _keyCode < 91) || (_keyCode > 105 && _keyCode < 112) || (_keyCode > 185 && _keyCode < 193) || (_keyCode > 218 && _keyCode < 223) || (_keyCode == 61 ||  _keyCode == 173))) {
+        _filterField.setValue(_oldValue);
+        evt.cancel();
+    }
+    keychar = String.fromCharCode(_keyCode);
+}
+
+function otherTransIdFunc(evt){var source = null;if(evt != null){source = evt.getSource();}if(source != null){var otherTransIdTmp = source.getProperty('otherTransId');AdfCustomEvent.queue(source,"transIdForOtherAuthorization",{otherTransId:otherTransIdTmp},true);}}
+function onlyDotsandNumbersNew(evt) {
+    var _keyCode = evt.getKeyCode();
+    var modifier = evt.getKeyModifiers();
+    var _filterField = evt.getCurrentTarget();
+    var _oldValue = _filterField.getValue();      
+    if(_keyCode==190){    
+    return true;
+    }
+    if (modifier == AdfKeyStroke.SHIFT_MASK || ((_keyCode == 32) || (_keyCode > 64 && _keyCode < 91) || (_keyCode > 105 && _keyCode < 112) || (_keyCode > 185 && _keyCode < 193) || (_keyCode > 218 && _keyCode < 223))) {
+        _filterField.setValue(_oldValue);
+        evt.cancel();
+    }      
+}

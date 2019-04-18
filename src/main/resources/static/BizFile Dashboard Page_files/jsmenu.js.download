@@ -1,0 +1,79 @@
+// JavaScript Document	
+function shDiv(val){
+
+	for(j=1;j<=3;j++){
+		if(val==j){
+			document.getElementById('div'+j).style.display='block';
+		}else{
+			document.getElementById('div'+j).style.display='none';	
+		}
+	}
+}
+
+
+
+
+
+function showFrontLayer1() {
+	document.getElementById('bg_mask1').style.visibility='visible';
+	document.getElementById('frontlayer1').style.visibility='visible';
+}
+function hideFrontLayer1() {
+	document.getElementById('bg_mask1').style.visibility='hidden';
+	document.getElementById('frontlayer1').style.visibility='hidden';
+}
+function showFrontLayer2() {
+	document.getElementById('bg_mask2').style.visibility='visible';
+	document.getElementById('frontlayer2').style.visibility='visible';
+}
+function hideFrontLayer2() {
+	document.getElementById('bg_mask2').style.visibility='hidden';
+	document.getElementById('frontlayer2').style.visibility='hidden';
+}
+function showFrontLayer3() {
+	document.getElementById('bg_mask3').style.visibility='visible';
+	document.getElementById('frontlayer3').style.visibility='visible';
+}
+function hideFrontLayer3() {
+	document.getElementById('bg_mask3').style.visibility='hidden';
+	document.getElementById('frontlayer3').style.visibility='hidden';
+}	
+
+function gototh(){
+///	alert(document.getElementById('gotopage').value);
+	if(document.getElementById('gotopage').value==1)
+		window.location='landingpage1.html?id=1'; 
+	else if(document.getElementById('gotopage').value==2)
+		window.location='landingpage1.html?id=2';
+	else if(document.getElementById('gotopage').value==3)
+		window.location='landingpage1.html?id=3';
+	else if(document.getElementById('gotopage').value==4)
+		window.location='landingpage1.html?id=4';
+	else if(document.getElementById('gotopage').value==5)
+		window.location='landingpage1.html?id=5';
+	else if(document.getElementById('gotopage').value==6)
+		window.location='landingpage1.html?id=6';
+	else if(document.getElementById('gotopage').value==7)
+		window.location='landingpage1.html?id=7';
+	else if(document.getElementById('gotopage').value==8)
+		window.location='landingpage1.html?id=8';
+		else
+		window.location='landingpage1.html?id=1';								   
+}
+
+
+function gotopage(){
+
+	document.forms["header-search"].submit();
+}
+
+function searchshow(val){
+if(val==1){
+	//document.getElementById('sershow1').style.display='block';
+	//document.getElementById('sershow2').style.display='none';	
+}else{
+	//document.getElementById('sershow1').style.display='none';
+	//document.getElementById('sershow2').style.display='block';	
+}
+}
+						

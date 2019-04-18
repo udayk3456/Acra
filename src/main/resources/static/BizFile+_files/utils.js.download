@@ -1,0 +1,323 @@
+function oldShareValue(e) {
+    var t, a, r, n = e.getSource(), i = e.getKeyCode(), l = n.getClientId();
+    l += "::content";
+    var g, d = document.getElementById(l), o = d.value, u = new RegExp("^(\\d{0,19}(\\.\\d{0,19})?|\\d{0,19})$");
+    if (8 === i || 37 === i || 39 === i)
+    return !0;
+    if (110 === i || 190 === i) {
+        if (null != o ? (t = document.getElementById(e.getSource().getClientId() + "::content").selectionStart, a = o.substr(0, t), r = o.substr(t), o = a + String.fromCharCode(46) + r) : o = String.fromCharCode(46), g = u.test(o))
+            return !0;
+        e.cancel()
+    }
+    else {
+        if (16 === i && (isShift = !0), isShift || 32 === i || i > 64 && 91 > i || i > 105 && 112 > i || i > 185 && 193 > i || i > 218 && 223 > i)
+            return e.cancel(), !1;
+        if (null != o ? (t = document.getElementById(e.getSource().getClientId() + "::content").selectionStart, a = o.substr(0, t), r = o.substr(t), o = a + String.fromCharCode(i >= 96 && 105 >= i ? i - 48 : i) + r) : o = String.fromCharCode(i >= 96 && 105 >= i ? i - 48 : i), g = u.test(o))
+        return !0;
+        e.cancel()
+    }
+}
+function validateShareValue() {
+    return !0
+}
+function validateChargeAmtValue(e) {
+    var t = e.getSource(), a = e.getKeyCode(), r = t.getClientId();
+    r += "::content";
+    var n, i, l, g, d = document.getElementById(r), o = d.value, u = new RegExp("^(\\d{0,14}(\\.\\d{0,2})?|\\d{0,14})$");
+    if (8 === a || 37 === a || 39 === a)
+    return !0;
+    if (isShift)
+    e.cancel();
+    else if (110 === a || 190 === a) {
+        if (null != o ? (n = document.getElementById(e.getSource().getClientId() + "::content").selectionStart, i = o.substr(0, n), l = o.substr(n), o = i + String.fromCharCode(46) + l) : o = String.fromCharCode(46), g = u.test(o))
+            return !0;
+        e.cancel()
+    }
+    else {
+        if (16 === a && (isShift = !0), isShift || 32 === a || a > 64 && 91 > a || a > 105 && 112 > a || a > 185 && 193 > a || a > 218 && 223 > a)
+            return e.cancel(), !1;
+        if (null != o ? (n = document.getElementById(e.getSource().getClientId() + "::content").selectionStart, i = o.substr(0, n), l = o.substr(n), o = i + String.fromCharCode(a >= 96 && 105 >= a ? a - 48 : a) + l) : o = String.fromCharCode(a >= 96 && 105 >= a ? a - 48 : a), g = u.test(o))
+        return !0;
+        e.cancel()
+    }
+}
+function validateAmountSeriesValue(e) {
+    var t = e.getSource(), a = e.getKeyCode(), r = t.getClientId();
+    r += "::content";
+    var n, i, l, g, d = document.getElementById(r), o = d.value, u = new RegExp("^(\\d{0,10}(\\.\\d{0,2})?|\\d{0,10})$");
+    if (8 === a || 37 === a || 39 === a)
+    return !0;
+    if (isShift)
+    e.cancel();
+    else if (110 === a || 190 === a) {
+        if (null != o ? (i = document.getElementById(e.getSource().getClientId() + "::content").selectionStart, l = o.substr(0, i), g = o.substr(i), o = l + String.fromCharCode(46) + g) : o = String.fromCharCode(46), n = u.test(o))
+            return !0;
+        e.cancel()
+    }
+    else {
+        if (16 === a && (isShift = !0), isShift || 32 === a || a > 64 && 91 > a || a > 105 && 112 > a || a > 185 && 193 > a || a > 218 && 223 > a)
+            return e.cancel(), !1;
+        if (null != o ? (i = document.getElementById(e.getSource().getClientId() + "::content").selectionStart, l = o.substr(0, i), g = o.substr(i), o = l + String.fromCharCode(a >= 96 && 105 >= a ? a - 48 : a) + g) : o = String.fromCharCode(a >= 96 && 105 >= a ? a - 48 : a), n = u.test(o))
+        return !0;
+        e.cancel()
+    }
+}
+function cleardatemsg(e) {
+    var t = e.getSource();
+    AdfPage.PAGE.clearMessages(t.getClientId())
+}
+function validateDateFormat(e) {
+    var t = /^(((0[1-9]|[12]\d|3[01])\/(0[13578]|1[02])\/((19|[2-9]\d)\d{2}))|((0[1-9]|[12]\d|30)\/(0[13456789]|1[012])\/((19|[2-9]\d)\d{2}))|((0[1-9]|1\d|2[0-8])\/02\/((19|[2-9]\d)\d{2}))|(29\/02\/((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$/, a = e.getSource(), r = a.getProperty("dateField"), n = a.findComponent(r), i = a.getProperty("fieldName"), l = a.getProperty("dateMsgField"), g = a.findComponent(l);
+    return "" == n.getSubmittedValue() || n.getSubmittedValue().match(t) ? validateDateValues(n) ? (e.cancel(), g.setMessage("Please enter a valid " + i + "."), AdfPage.PAGE.addPartialTrigger(g), null) : (g.setMessage(""), 
+    void AdfPage.PAGE.addPartialTrigger(g)) : (e.cancel(), g.setMessage("Please enter a valid " + i + "."), AdfPage.PAGE.addPartialTrigger(g), null)
+}
+function validateProposedName(e) {
+    var t = e.getKeyCode(), a = e.getCurrentTarget(), r = a.getValue();
+    return 16 === t && (isShift = !0), isShift && (t > 47 && 53 > t || t > 53 && 58 > t || t > 189 && 193 > t || t > 218 && 222 > t || 59 === t || 61 === t || 173 === t || 188 === t) ? !0 : (isShift && 53 === t && (a.setValue(r), e.cancel()), 
+    void (keychar = String.fromCharCode(t)))
+}
+function foriegnAddressValidation(e) {
+    var t = e.getKeyCode(), a = e.getCurrentTarget(), r = a.getValue();
+    return 32 === t || 109 === t || 111 === t || !isShift && 189 === t || !isShift && 191 === t || 51 === t || !isShift && 190 === t || 110 === t || 55 === t || !isShift && 188 === t || !isShift && 220 === t || !isShift && 222 == t ? !0 : (16 === t && (isShift = !0), (isShift || 59 === t || 61 === t || t > 105 && 112 > t || t > 185 && 193 > t || t > 218 && 223 > t) && (a.setValue(r), e.cancel()), 
+    void (keychar = String.fromCharCode(t)))
+}
+function onlyDotsandNumbers(e) {
+    var t = e.getKeyCode(), a = e.getCurrentTarget(), r = a.getValue();
+    return 16 === t && (isShift = !0), 110 === t || 190 === t && 1 != isShift ? !0 : ((isShift || 32 === t || t > 64 && 91 > t || t > 105 && 112 > t || t > 185 && 193 > t || t > 218 && 223 > t) && (a.setValue(r), e.cancel()), 
+    void (keychar = String.fromCharCode(t)))
+}
+function fixedLineValidation(e) {
+    var t, a = e.getSource(), r = a.getProperty("lineField"), n = a.getProperty("lineMsgField"), i = a.findComponent(n), l = a.getProperty("fieldName");
+    return t = null == r ? a.getValue() : a.findComponent(r).getValue(), 8 !== t.length || 0 !== t.indexOf(6) && 0 !== t.indexOf(3) ? (e.cancel(), i.setMessage(null != l ? "Please enter a valid " + l : "Please enter a valid Local Fixed Line No."), AdfPage.PAGE.addPartialTrigger(i), null) : (i.setMessage(""), AdfPage.PAGE.addPartialTrigger(i), !0)
+}
+function companyTelValidation(e) {
+    var t, a = e.getSource(), r = a.getProperty("lineField"), n = a.getProperty("lineMsgField"), i = a.findComponent(n);
+    return t = null == r ? a.getValue() : a.findComponent(r).getValue(), 8 !== t.length || 0 !== t.indexOf(6) && 0 !== t.indexOf(3) && 0 !== t.indexOf(8) ? (e.cancel(), i.setMessage("Please enter a valid Company Tel No."), AdfPage.PAGE.addPartialTrigger(i), null) : (i.setMessage(""), AdfPage.PAGE.addPartialTrigger(i), !0)
+}
+function lettersOnly(e) {
+    var t = e.getKeyCode(), a = e.getCurrentTarget(), r = a.getValue();16 === t && (isShift = !0), (isShift || t > 47 && 58 > t || t > 95 && 112 > t || t > 185 && 193 > t || t > 218 && 223 > t) && (a.setValue(r), e.cancel()), keychar = String.fromCharCode(t)
+}
+function lettersAndSpaceOnly(e) {
+    var t = e.getKeyCode(), a = e.getCurrentTarget(), r = a.getValue();
+    return 32 === t ? !0 : (16 === t && (isShift = !0), (isShift || 59 === t || 61 === t || 173 === t || t > 47 && 58 > t || t > 95 && 112 > t || t > 185 && 193 > t || t > 218 && 223 > t) && (a.setValue(r), e.cancel()), 
+    void (keychar = String.fromCharCode(t)))
+}
+function numbersOnly(e) {
+    var t = e.getKeyCode(), a = e.getKeyModifiers(), r = e.getCurrentTarget(), n = r.getValue();
+    return a === AdfKeyStroke.CTRL_MASK && 86 === t ? 
+    void (keychar = String.fromCharCode(t)) : ((a === AdfKeyStroke.SHIFT_MASK || 59 === t || 32 === t || t > 64 && 91 > t || t > 105 && 112 > t || t > 185 && 193 > t || t > 218 && 223 > t) && (r.setValue(n), e.cancel()), 
+    void (keychar = String.fromCharCode(t)))
+}
+function alphaNumericOnly(e) {
+    var t = e.getKeyCode(), a = e.getKeyModifiers(), r = e.getCurrentTarget(), n = r.getValue();(a === AdfKeyStroke.SHIFT_MASK || 32 === t || t > 105 && 112 > t || t > 185 && 193 > t || t > 218 && 223 > t || 173 === t || 61 === t || 59 === t) && (r.setValue(n), e.cancel()), keychar = String.fromCharCode(t)
+}
+function alphaNumericWithWhiteSpace(e) {
+    var t = e.getKeyCode(), a = e.getCurrentTarget(), r = a.getValue();16 === t && (isShift = !0), (isShift || t > 105 && 112 > t || t > 185 && 193 > t || t > 218 && 223 > t) && (a.setValue(r), e.cancel()), keychar = String.fromCharCode(t)
+}
+function alphaNumericWithSpaceHyphenSlashOnly(e) {
+    var t = e.getKeyCode(), a = e.getCurrentTarget(), r = a.getValue();
+    return 32 === t || 109 === t || 111 === t || 189 === t || 188 === t || 190 === t || 191 === t ? !1 : (16 === t && (isShift = !0), (isShift || t > 105 && 112 > t || t > 185 && 193 > t || t > 218 && 223 > t) && (a.setValue(r), e.cancel()), 
+    void (keychar = String.fromCharCode(t)))
+}
+function alphaNumericWithCommaOnly(e) {
+    var t = e.getKeyCode(), a = e.getCurrentTarget(), r = a.getValue();
+    return 188 === t ? !0 : (16 === t && (isShift = !0), (isShift || t > 105 && 112 > t || t > 185 && 193 > t || t > 218 && 223 > t) && (a.setValue(r), e.cancel()), 
+    void (keychar = String.fromCharCode(t)))
+}
+function onkeyup(e) {
+    var t = e.getKeyCode();16 === t && (isShift = !1)
+}
+function cpehoursValidation(e) {
+    var t, a = e.getSource(), r = a.getProperty("cpeField"), n = a.getProperty("cpeMsgField"), i = a.findComponent(n);
+    return t = null == r ? a.getValue() : a.findComponent(r).getValue(),  - 1 === t.indexOf(".") ? (i.setMessage(""), AdfPage.PAGE.addPartialTrigger(i), !0) : (t = t.substring(t.indexOf(".") + 1, t.length), 1 !== t.length || 5 != t && 0 != t ? (e.cancel(), i.setMessage("Only whole numbers or incremental hours of 0.5 hours are accepted."), AdfPage.PAGE.addPartialTrigger(i), null) : (i.setMessage(""), AdfPage.PAGE.addPartialTrigger(i), !0))
+}
+
+function emailValidation(e) {
+  var t,
+  a = e.getSource(),
+  n = a.getProperty('emailField'),
+  r = a.getProperty('emailMsgField'),
+//  g = a.getProperty('fieldName'),
+  l = a.findComponent(r),
+  i = /^[_A-Za-z0-9-]+(\.[_A-Za-z0-9-]+)*@[_A-Za-z0-9-]+(\.[_A-Za-z0-9-]+)*(\.[A-Za-z]{1,})$/;
+  t = null == n ? a.getValue()  : a.findComponent(n).getValue();
+  if (t.length <= 320) {
+    return t = null == n ? a.getValue()  : a.findComponent(n).getValue(),
+    t.match(i) ? (l.setMessage(''), AdfPage.PAGE.addPartialTrigger(l), !0)  : 0 !== t.length ? (e.cancel(), l.setMessage("Please enter a valid Email Address."), AdfPage.PAGE.addPartialTrigger(l), null)  : void l.setMessage('')
+  } else {
+    e.cancel(),
+    l.setMessage("Please enter a valid Email Address."),
+    AdfPage.PAGE.addPartialTrigger(l);
+  }
+  }
+
+
+
+
+function mobileValidation(e) {
+    var t, a = e.getSource(), r = a.getProperty("mobileField"), n = a.getProperty("mobileMsgField"), i = a.findComponent(n);
+    return t = null == r ? a.getValue() : a.findComponent(r).getValue(), null != t && "" != t && (8 !== t.length || 0 !== t.indexOf(8) && 0 !== t.indexOf(9)) ? (e.cancel(), i.setMessage("Please enter a valid Local Mobile No."), AdfPage.PAGE.addPartialTrigger(i), null) : (i.setMessage(""), AdfPage.PAGE.addPartialTrigger(i), !0)
+}
+function mobileValidationpaReg(e) {
+    var t = e.getSource(), a = t.getProperty("mobileMsgField"), r = t.findComponent(a), n = t.getValue();
+    return "" == n ? (e.cancel(), r.setMessage("Please enter a valid Local Mobile No."), AdfPage.PAGE.addPartialTrigger(r), null) : 8 !== n.length || 0 !== n.indexOf(8) && 0 !== n.indexOf(9) ? (e.cancel(), r.setMessage("Please enter a valid Local Mobile No."), null) : (r.setMessage(""), AdfPage.PAGE.addPartialTrigger(r), !0)
+}
+function postalCodeValidation(e) {
+    var t = e.getSource(), a = t.getProperty("postalField"), r = t.getProperty("postalMsgField"), n = t.findComponent(r);
+    return postalNumber = null == a ? t.getValue() : t.findComponent(a).getValue(), 0 === postalNumber.length || "" == postalNumber ? (e.cancel(), n.setMessage("Please enter a valid Postal Code."), AdfPage.PAGE.addPartialTrigger(n), null) : 6 === postalNumber.length ? (n.setMessage(""), AdfPage.PAGE.addPartialTrigger(n), !0) : (e.cancel(), n.setMessage("Please enter a valid Postal Code."), AdfPage.PAGE.addPartialTrigger(n), null)
+}
+function clearGlobalMessage() {
+    AdfPage.PAGE.clearMessages(null)
+}
+function dateValidation(e) {
+    var t = /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/, a = e.getSource(), r = a.getProperty("dateField"), n = a.findComponent(r), i = a.getProperty("dateMsgField"), l = a.findComponent(i), g = a.getProperty("fieldName");
+    if (null != n.getSubmittedValue() && "" != n.getSubmittedValue()) {
+        if (!n.getSubmittedValue().match(t))
+            return e.cancel(), l.setMessage("Date Should be in format dd/mm/yyyy"), AdfPage.PAGE.addPartialTrigger(l), null;
+        var d = n.getSubmittedValue().lastIndexOf("/"), o = n.getSubmittedValue().substring(d + 1, n.getSubmittedValue().length);
+        if (1900 > o)
+        return e.cancel(), l.setMessage(null != g ? "Please enter a valid " + g : "Please enter a valid date."), AdfPage.PAGE.addPartialTrigger(l), null;
+        l.setMessage(""), AdfPage.PAGE.addPartialTrigger(l)
+    }
+}
+function characterCounter(e) {
+    var t = e.getSource(), a = t.getProperty("outField"), r = parseInt(t.getProperty("maxLength"), 10), n = t.findComponent(a);"null" != t.getValue() && (t.getSubmittedValue().length > r ? t.setValue(t.getSubmittedValue().substring(0, r)) : n.setValue(" Characters Left :" + (r - t.getSubmittedValue().length)), AdfPage.PAGE.addPartialTrigger(t), AdfPage.PAGE.addPartialTrigger(n))
+}
+function bizChgfutureDateValidation(e) {
+    var t = new Date, a = t.getUTCDate(), r = t.getMonth() + 1, n = t.getUTCFullYear(), i = /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/, l = e.getSource(), g = l.getProperty("dateField"), d = l.findComponent(g), o = l.getProperty("dateMsgField"), u = l.findComponent(o), s = l.getProperty("fieldName"), c = l.getProperty("attribute"), f = d.getValue();
+    if (!d.getSubmittedValue().match(i) && "" != d.getSubmittedValue())
+    return e.cancel(), u.setMessage("Please enter a valid " + s + "."), AdfPage.PAGE.addPartialTrigger(u), null;
+    var m = d.getSubmittedValue().substring(0, 2), S = d.getSubmittedValue().substring(3, 5), P = d.getSubmittedValue().substring(6, 10);
+    if (1900 > P && "" != P)
+    return e.cancel(), u.setMessage("Please enter a valid " + s + "."), AdfPage.PAGE.addPartialTrigger(u), null;
+    if (P > n || P === n && S > r || P === n && S === r && m > a) {
+        if (e.cancel(), null != c) {
+            var h = "Please enter a valid date. <<>> must be an earlier date.";
+            u.setMessage(h.replace("<<>>", c))
+        }
+        else 
+        u.setMessage("Please enter a valid date. " + s + " must be an earlier date.");
+        return f.setValue(""), AdfPage.PAGE.addPartialTrigger(u), null
+    }
+    u.setMessage(""), AdfPage.PAGE.addPartialTrigger(u)
+}
+function nameChange(e) {
+    component = e.getSource(), AdfCustomEvent.queue(component, "nameChgEvent", 
+    {
+        payload : component.getSubmittedValue()
+    },
+!0), e.cancel()
+}
+function numbersandforwardslashOnly(e) {
+    var t = e.getKeyCode(), a = e.getCurrentTarget(), r = a.getValue();16 === t && (isShift = !0), (isShift || 32 === t || t > 64 && 91 > t || t > 105 && 111 > t || t > 185 && 190 > t || 192 === t || 193 === t || t > 218 && 223 > t) && (a.setValue(r), e.cancel()), keychar = String.fromCharCode(t);
+    var n = e.getSource(), i = n.getProperty("fieldName");
+    if (9 === t) {
+        var l = /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/, g = n.getProperty("dateField"), d = n.findComponent(g), o = n.getProperty("dateMsgField"), u = n.findComponent(o);
+        if (!d.getSubmittedValue().match(l))
+        return null != i ? (u.setMessage("Please enter a valid " + i + "."), null) : (u.setMessage("Please enter a valid date"), null)
+    }
+}
+function alphaNumericWithSpaceHyphenSlashOnlyCommaDot(e) {
+    var t = e.getKeyCode(), a = e.getCurrentTarget(), r = a.getValue();
+    return 32 === t || 109 === t || 111 === t || 189 === t || 191 === t || 188 === t || 190 === t ? !1 : (16 === t && (isShift = !0), (isShift || t > 105 && 112 > t || t > 185 && 193 > t || t > 218 && 223 > t) && (a.setValue(r), e.cancel()), 
+    void (keychar = String.fromCharCode(t)))
+}
+function paRegNameValidation(e) {
+    var t = e.getKeyCode(), a = e.getCurrentTarget(), r = a.getValue();
+    return 16 === t ? isShift = !0 : shiftkeydn = !1, t > 36 && 41 > t || t > 45 && 58 > t && 53 !== t || !shiftkeydn && !isShift && 53 === t || 8 === t || 9 === t || 59 === t || 61 === t || t > 64 && 91 > t || 32 === t || 106 === t || 107 === t || 109 === t || 110 === t || 111 === t || 173 === t || 189 === t || 191 === t || 192 === t || 186 === t || 187 === t || 188 === t || 189 === t || 190 === t || 191 === t || 222 === t || 219 === t || 221 === t || 220 === t ? !1 : isShift && 61 === t || isShift && 59 === t || isShift && 173 === t || isShift && t > 47 && 58 > t && 53 !== t || isShift && t > 185 && 190 > t ? !1 : (a.setValue(r), e.cancel(), 
+    void (keychar = String.fromCharCode(t)))
+}
+function validateDateValues(e) {
+    var t = e.getSubmittedValue().split("/");
+    if (lopera1 = t.length, lopera1 > 1)
+    var a = e.getSubmittedValue().split("/");
+    var r = parseInt(a[0], 10), n = parseInt(a[1], 10), i = parseInt(a[2], 10), l = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    return 2 !== n || (i % 4 || !(i % 100)) && i % 400 || (l[1] = 29), r > l[n - 1] ? !1 : 
+    void 0
+}
+function personNameValidation(e) {
+    var t = e.getKeyCode(), a = e.getCurrentTarget(), r = a.getValue();
+    return 16 === t ? isShift = !0 : shiftkeydn = !1, 32 == t ? !0 : !isShift && (191 === t || 190 === t || 188 === t || 189 === t || 222 === t || 8 === t || 46 === t || t > 47 && 58 > t || t > 64 && 106 > t) ? !0 : isShift && 50 === t || isShift && 57 === t || isShift && 48 === t || isShift && 222 === t ? !0 : (a.setValue(r), 
+    void e.cancel())
+}
+function handleCustomServerEvent(e) {
+    var t = e.getSource(), a = t.getProperty("key");null != a && AdfCustomEvent.queue(t, "CustomServerEvent", 
+    {
+        key : a
+    },
+!1)
+}
+function bankruptcy(e) {
+    var t = e.getKeyCode(), a = e.getCurrentTarget(), r = a.getValue();16 === t && (isShift = !0), (isShift || 32 === t || t > 105 && 112 > t || t > 185 && 193 > t || t > 218 && 223 > t || 173 === t || 61 === t || 59 === t) && (a.setValue(r), e.cancel()), keychar = String.fromCharCode(t)
+}
+function setNaemFocus(e) {
+    var t = e.getSource(), a = t.getProperty("focusField1"), r = t.findComponent(a).getValue(), n = t.getProperty("focusField");"1" == r && t.findComponent(n).focus()
+}
+function clearPrevErrMsgs(e) {
+    var t = e.getSource().findComponent(e.getSource().getProperty("beMsgId")), a = e.getSource().findComponent(e.getSource().getProperty("feMsgId")), r = e.getSource().findComponent(e.getSource().getProperty("compId"));null != r && r.getProperty("valid") && null != a ? a.setMessage("") : null != t && t.setVisible(!1)
+}
+function populateRemChars(e) {
+    var t = e.getSource(), a = e.getSource().findComponent(t.getProperty("counterId")), r = t.getProperty("maxLength"), n = null != t.getSubmittedValue() ? t.getSubmittedValue().length : 0, i = t.getProperty("counterPrefix"), l = i + (r - n);
+    a.setValue(l)
+}
+function populateRemCharsByDOM(e) {
+    var t = e.getSource(), a = document.getElementById(e.getSource().getClientId().replace(e.getSource().getId(), t.getProperty("counterId"))), r = t.getProperty("maxLength"), n = null != t.getSubmittedValue() ? t.getSubmittedValue().length : 0, i = t.getProperty("counterPrefix"), l = i + (r - n);
+    a.childNodes[0].nodeValue = l
+}
+function disableEvent(e) {
+    e.cancel()
+}
+function clearMsgComp(e) {
+    var t = e.getSource().findComponent(e.getSource().getProperty("msgId"));null != t && t.setVisible(!1)
+}
+function clkcharacterCounter(e) {
+    var t = e.getSource(), a = t.getProperty("outField"), r = parseInt(t.getProperty("maxLength"), 10), n = t.findComponent(a);"null" != t.getSubmittedValue() && (0 === t.getSubmittedValue().trim().length && (t.setValue(""), t.setSubmittedValue(""), n.setValue(" Characters Left :" + (r - t.getSubmittedValue().trim().length))), AdfPage.PAGE.addPartialTrigger(t), AdfPage.PAGE.addPartialTrigger(n))
+}
+function pafAppointmentDate(e) {
+    var t = new Date, a = t.getUTCDate(), r = t.getMonth() + 1, n = t.getUTCFullYear(), i = /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/, l = e.getSource(), g = l.getProperty("dateField"), d = l.findComponent(g), o = l.getProperty("dateMsgField"), u = l.findComponent(o), s = l.getProperty("fieldName");
+    if ("" == d.getSubmittedValue())
+    return e.cancel(), null;
+    if (!d.getSubmittedValue().match(i))
+    return e.cancel(), u.setMessage(null != s ? "Please enter a valid " + s : "Date entered is invalid."), AdfPage.PAGE.addPartialTrigger(u), null;
+    var c = d.getSubmittedValue().substring(0, 2), f = d.getSubmittedValue().substring(3, 5), m = d.getSubmittedValue().substring(6, 10);
+    return 1900 > m ? (e.cancel(), u.setMessage(null != s ? "Please enter a valid " + s + "." : "Year Should be Greater than 1900."), AdfPage.PAGE.addPartialTrigger(u), null) : m !== n || f !== r || c !== a ? (e.cancel(), u.setMessage(null != s ? "Please enter a valid date. " + s + " must be a current date." : "Date must be a current date."), AdfPage.PAGE.addPartialTrigger(u), null) : (u.setMessage(""), 
+    void AdfPage.PAGE.addPartialTrigger(u))
+}
+function preparemousedown(e) {
+    alert("You are not authorised to perform this action"), e.cancel()
+}
+function prepareLogout() {
+    logoutAction = 1
+}
+function lettersAndSpaceOnlyPayment(e) {
+    var t = e.getKeyCode(), a = e.getCurrentTarget(), n = a.getValue();
+    return 32 === t ? !0 : (16 === t && (isShift = !0), (isShift || t > 105 && 112 > t || t > 185 && 193 > t || t > 218 && 223 > t) && (a.setValue(n), e.cancel()), 
+    void (keychar = String.fromCharCode(t)))
+}
+function prsnNameValidation(e) {
+    var t = e.getKeyCode(), a = e.getCurrentTarget(), r = a.getValue();
+    return 16 === t ? isShift = !0 : shiftkeydn = !1, t > 36 && 41 > t || t > 45 && 48 > t || 8 === t || 9 === t || 59 === t || 61 === t || t > 64 && 91 > t || 32 === t || 106 === t || 107 === t || 109 === t || 110 === t || 111 === t || 173 === t || 189 === t || 191 === t || 192 === t || 186 === t || 187 === t || 188 === t || 189 === t || 190 === t || 191 === t || 222 === t || 219 === t || 221 === t || 220 === t ? !1 : isShift && 61 === t || isShift && 59 === t || isShift && 173 === t || isShift && t > 47 && 58 > t && 53 !== t || isShift && t > 185 && 190 > t ? !1 : (a.setValue(r), e.cancel(), 
+    void (keychar = String.fromCharCode(t)))
+}
+function validateUnitNew(e) {
+    var t = e.getKeyCode(), a = document.getElementById(e.getSource().getClientId() + "::content").selectionStart, r = e.getKeyModifiers();
+    return r !== AdfKeyStroke.SHIFT_MASK && a >= 0 && (189 === t || 191 === t || 59 === t || 173 === t || 191 === t || 189 === t || 188 === t || 186 === t || 111 === t || 109 === t) ? !0 : ((r === AdfKeyStroke.SHIFT_MASK || 32 === t || 59 === t || 173 === t || t > 105 && 109 > t || 110 === t || t > 185 && 193 > t || t > 218 && 223 > t) && e.cancel(), 
+    void (keychar = String.fromCharCode(t)))
+}
+isShift = !1;
+var logoutAction = 0;
+
+function otherTransIdFunc(evt){var source = null;if(evt != null){source = evt.getSource();}if(source != null){var otherTransIdTmp = source.getProperty('otherTransId');AdfCustomEvent.queue(source,"transIdForOtherAuthorization",{otherTransId:otherTransIdTmp},true);}}
+function onlyDotsandNumbersNew(evt) {
+    var _keyCode = evt.getKeyCode();
+    var modifier = evt.getKeyModifiers();
+    var _filterField = evt.getCurrentTarget();
+    var _oldValue = _filterField.getValue();      
+    if(_keyCode==190){    
+    return true;
+    }
+    if (modifier == AdfKeyStroke.SHIFT_MASK || ((_keyCode == 32) || (_keyCode > 64 && _keyCode < 91) || (_keyCode > 105 && _keyCode < 112) || (_keyCode > 185 && _keyCode < 193) || (_keyCode > 218 && _keyCode < 223))) {
+        _filterField.setValue(_oldValue);
+        evt.cancel();
+    }      
+}

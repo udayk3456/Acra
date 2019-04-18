@@ -1,0 +1,512 @@
+ function searchGoogle(){
+    var strWindowFeatures = "location=yes,height=570,width=520,scrollbars=yes,status=yes";
+    var text1 = document.getElementById("pt1:pt_it1::content").value;
+    var soc1 = "004931540704988620707:rdqe-le0hb8";
+    var URL = 'http://www.google.com.sg/cse?q='+text1+'&'+'cx='+soc1;
+     if (/^[a-zA-Z0-9- ]*$/.test(text1) == false) {
+    alert('Your search query contains illegal characters.');
+    }
+    else{
+         window.open(URL); 
+    }
+   }
+        
+      function make_blank(event)
+{
+ component = event.getSource();
+ component.setValue("");
+}
+// hide #back-top first
+$(function () {
+	$(window).scroll(function () {
+		if ($(this).scrollTop() > 100) {
+			$('#back-top').fadeIn();
+		} else {
+			$('#back-top').fadeOut();
+		}
+	});
+
+	// scroll body to 0px on click
+	$('#back-top a').click(function () {
+		$('body,html').animate({
+			scrollTop: 0
+		}, 800);
+		return false;
+	});
+});
+function make_srchinfo(event)
+{
+ component = event.getSource();
+  if(component.getValue() == null || component.getValue() == ""){
+ component.setValue("Search Information");
+  }
+}
+
+// updated current year code
+var currentYear = (new Date).getFullYear();
+	$(document).ready(function() {
+	$("#Current_Year").text( (new Date).getFullYear() );
+});
+
+function gotoFooter(event){
+$("#footer_section").attr('tabindex',-1).focus();
+}
+
+      function preparemousedown(event) {
+alert('Yow are not authorised to perform this operation, For this link..');
+ event.cancel();
+ //return false;
+ }
+      var logoutAction = 0
+function prepareLogout(event) {
+     
+            logoutAction = 1;
+          
+        }
+
+
+// updated current year code
+var currentYear = (new Date).getFullYear();
+	$(document).ready(function() {
+	$("#Current_Year").text( (new Date).getFullYear() );
+});
+
+$(window).load(function(){
+            $('#slider').nivoSlider();              
+        });
+
+// jquery Code
+    $(document).ready(function(){
+    
+   $("body").on("mouseover",function(){
+        $(".af_inputDate_content").attr("placeholder", "DD/MM/YYYY");
+		
+		$(".uen_lcom .af_inputText_content").attr("placeholder", "e.g. 200712345Z");
+		$(".uen_gc .af_inputText_content").attr("placeholder", "e.g. 200712345Z");	
+		$(".uen_csp .af_inputText_content").attr("placeholder", "e.g. 200712345Z");
+		
+		$(".uen_fcom .af_inputText_content").attr("placeholder", "e.g. T08FC9854F");
+		$(".uen_llp .af_inputText_content").attr("placeholder", "e.g. T05LL9632Y");		
+		$(".uen_business .af_inputText_content").attr("placeholder", "e.g. 51231103Z");
+		$(".uen_lp .af_inputText_content").attr("placeholder", "e.g. T13LP1234X");
+		$(".uen_paf .af_inputText_content").attr("placeholder", "e.g. T11PF8546J");
+		$(".uen_pa .af_inputText_content").attr("placeholder", "e.g. 99991");			
+		$(".uen_alq .af_inputText_content").attr("placeholder", "e.g. LQ1234");	
+		$(".uen_common .af_inputText_content").attr("placeholder", "e.g. 200712345Z");
+		
+		$(".trnsno .af_inputText_content").attr("placeholder", "e.g. C175036329");
+                
+		$(".trnsno-buss .af_inputText_content").attr("placeholder", "e.g. B170570459");
+		$(".trnsno-lp .af_inputText_content").attr("placeholder", "e.g. K175013034");
+		$(".trnsno-llp .af_inputText_content").attr("placeholder", "e.g. L175008485");	
+		$(".trnsno-lc .af_inputText_content").attr("placeholder", "e.g. C175036329");
+		$(".trnsno-fc .af_inputText_content").attr("placeholder", "e.g. C175036279");
+		$(".trnsno-paf .af_inputText_content").attr("placeholder", "e.g. A170008047");
+		$(".trnsno-pa .af_inputText_content").attr("placeholder", "e.g. D170011152");
+				
+		$(".lclfixedno .af_inputText_content").attr("placeholder", "e.g. 61231234");
+		$(".lclmobno .af_inputText_content").attr("placeholder", "e.g. 93331234");
+		$(".email .af_inputText_content").attr("placeholder", "e.g. example@example.com"); 
+		/*$(".identno .af_inputText_content").attr("placeholder", "e.g. S1234567A");
+		$(".identno_fin .af_inputText_content").attr("placeholder", "e.g. G5812345H");*/		
+    })
+    
+      $('a[href^="../pages/TermsAndConditions.jspx"]').css(
+      {
+        "color":"#BE6900",
+        "font-family":"Trebuchet-MS",
+        "font-size":"14px"
+      }
+      );
+    
+     $("body").delegate(".af_inputDate_content","keypress",function(e) { 
+	 var code = (e.keyCode) ? e.keyCode : e.which;
+      if($(this).val().length > 9) {
+		  if(code == 8 || code == 46)
+		  {
+			return true;
+		  }
+		  else
+		  {
+			return false;
+		  }
+     }
+
+    });
+     $(".ent_srch .af_inputText_content").attr("placeholder","Search for Business Entity (Enter UEN or Entity Name)");
+	 $(".ent_srch2 .af_inputText_content").attr("placeholder","Search for Public Accountant (Enter PA no or PA name)");
+         
+      $("#imgclose").click(function () {
+            $(".announcebar").hide(); 
+        });
+            $('*[style*="font-size: 13px"]').addClass("font_size13");
+            $('*[style*="font-size: 14px"]').addClass("font_size14");
+            $('*[style*="font-size: 16px"]').addClass("font_size16");
+            $('*[style*="font-size: 18px"]').addClass("font_size18");
+            $('*[style*="font-size: 20px"]').addClass("font_size20");
+            $('*[style*="font-size: 22px"]').addClass("font_size22");
+            $('*[style*="font-size: 24px"]').addClass("font_size24");
+            $('*[style*="font-size: 26px"]').addClass("font_size26");
+            $('*[style*="font-size: 28px"]').addClass("font_size28");
+            $('*[style*="font-size: large"]').addClass("font_size18");
+            
+    var section = new Array('.arccontainer span','.down_load p','.Social_Us p','.Privacy_AllRights a','.menutdbar p','.activelink','.af_panelBox_header-element','.bizcatheadtext66','.annon_disc3 div','.annon_disc2 div','.annon_disc1 div','.anno_heding_dtls','.sitemap_label','.bizBreadCrumb','.file_ser_disption p','.menuitemheader','.dropdown li a','.af_commandImageLink','.af_commandLink','.af_menu_bar-item-text','.myinfotext','.af_panelBox_header-element','.bizcatheadtext66','.af_panelBox_header-element','.af_breadCrumbs_step','.date_annomnt','.cpyll_rignts a','.sitemap-link','.sitemap-header-list-tag label','.sitemap-header-list label','.FirstTab a','.LastTabE a','.cpyll_rignts span','.cpyll_rignts td','.three_columnTabs li b','.initi_acfoter b','.initi_acfoter p','.feed_bck_Service td','.feed_bck_Service a','.nst-content ul li a','.nst-content p','.nst-content b','.annonce-header2','.annmnt_header','.btton_vertaps a','.nstabs li b','.mtop_nav li a','.announcements_AcraMobile2 span','.announcements_AcraMobile','.mtop_nav li a','.Acra_logo_Left small','.Cart_Login li a','.home_active a','.search_link','#arccontainer .bizpara1','.taglinetext a','.arccontainer label','.arccontainer button','.arccontainer .text', '.arccontainer div', '.arccontainer p','.arccontainer a','arccontainer ul','.arccontainer li','.arccontainer td',
+  '#footer_section span','#footer_section .text', '#footer_section div', '#footer_section p','#footer_section a','#footer_section ul','#footer_section li','#footer_section td','a[href="http://www.acra.gov.sg/components/wireframes/howToGuidesChapters.aspx?pageid=1492"]','a[href="http://www.acra.gov.sg/components/wireframes/howToGuidesSummary.aspx?pageid=1546"]','.font_size13','.font_size14','.guidedasst_panelBox .af_panelBox_header-element','.af_inputText_content','select','input','.table_trh_shares1 th','.table_trh_shares1 td','.af_panelHeader_title-text2'); 
+  section = section.join(',');
+  var section1 = new Array('.heighlighttext1,.alternate_title,.heighlighttext1_singpass,.af_panelAccordion_header-title td,.namehader5,.singbizcategorytext4,.buyinfoblock1,.namehader-main,.bizcatheadtext3,.singbizheadertext1,.hyperlinnew7,.singbizcategorytext3,.spantext,.spantext1,.buyinformation_label.af_panelLabelAndMessage_label,.selecboxdivmain1,.font_size16,.font_size18,.dashboard_panelBox h1,.esurvey_text,.esurvey_link','.af_panelAccordion_header-title','.bizcattext','.pmreceipt_panelBox .af_panelHeader_title-text2','.enets_text','.enet_headers');
+   section1 = section1.join(',');
+    var section2 = new Array('.bizcatheadtext1','.bizcatheadtext2','.guidedasst_Title','.font_size26','.font_size28');
+    section2 = section2.join(',');
+      var section3 = new Array('.font_size22','.font_size20','.font_size22','.font_size24','.bizcatheadtext66.af_goLink','.biztitle1');
+    section3 = section3.join(',');
+sessionStorage.setItem('count',0);
+  // Increase Font Size
+  $(".increaseFont").on("click",function(){
+sessionStorage.setItem('count',Number(sessionStorage.getItem('count'))+1);
+   if (sessionStorage.count == 1) {
+    var currentFontSize = $(section).css('font-size');
+    var currentFontSizeNum = parseFloat(currentFontSize, 10);
+    var newFontSize = 14;
+    $(section).css('font-size', 14.3);
+      $(section1).css('font-size', 18.5);
+        $(section2).css('font-size', 32.3);
+        $(section3).css('font-size', 24.3);
+    sessionStorage.count1=0;
+    return false;
+       }
+         if (sessionStorage.count == 2) {
+    var currentFontSize = $(section).css('font-size');
+    var currentFontSizeNum = parseFloat(currentFontSize, 10);
+    var newFontSize = 14.5;
+    $(section).css('font-size', 14.5);
+     $(section1).css('font-size', 19);
+     $(section2).css('font-size', 32.6);
+      $(section3).css('font-size', 24.6);
+    sessionStorage.count1=0;
+    return false;
+       }
+       if (sessionStorage.count == 3) {
+    var currentFontSize = $(section).css('font-size');
+    var currentFontSizeNum = parseFloat(currentFontSize, 10);
+    var newFontSize = 15;
+    $(section).css('font-size', 15);
+    $(section1).css('font-size', 19.5);
+    $(section2).css('font-size', 32.9);
+     $(section3).css('font-size', 24.9);
+    sessionStorage.count1=0;
+    return false;
+       }
+         if (sessionStorage.count == 4) {
+    var currentFontSize = $(section).css('font-size');
+    var currentFontSizeNum = parseFloat(currentFontSize, 10);
+    var newFontSize = 15.3;
+    $(section).css('font-size', 15.3);
+    $(section1).css('font-size', 20);
+    $(section2).css('font-size', 33.3);
+     $(section3).css('font-size', 25.2);
+    sessionStorage.count1=0;
+    return false;
+       }
+         if (sessionStorage.count == 5) {
+    var currentFontSize = $(section).css('font-size');
+    var currentFontSizeNum = parseFloat(currentFontSize, 10);
+    var newFontSize = 15.7;
+    $(section).css('font-size', 15.7);
+     $(section1).css('font-size', 20.5);
+     $(section2).css('font-size', 33.6);
+      $(section3).css('font-size', 25.5);
+    sessionStorage.count1=0;
+    return false;
+       }
+        if (sessionStorage.count == 6) {
+    var currentFontSize = $(section).css('font-size');
+    var currentFontSizeNum = parseFloat(currentFontSize, 10);
+    var newFontSize = 16;
+    $(section).css('font-size', 16);
+     $(section1).css('font-size', 21);
+     $(section2).css('font-size', 34);
+      $(section3).css('font-size', 25.8);
+    sessionStorage.count1=0;
+    return false;
+       }
+  });
+  $("*").live("mouseover",function(){
+   if (sessionStorage.count == 1) {
+    var currentFontSize = $(section).css('font-size');
+    var currentFontSizeNum = parseFloat(currentFontSize, 10);
+    var newFontSize = 14;
+    $(section).css('font-size', 14.3);
+      $(section1).css('font-size', 18.5);
+        $(section2).css('font-size', 32.3);
+        $(section3).css('font-size', 24.3);
+    sessionStorage.count1=0;
+    return false;
+       }
+         if (sessionStorage.count == 2) {
+    var currentFontSize = $(section).css('font-size');
+    var currentFontSizeNum = parseFloat(currentFontSize, 10);
+    var newFontSize = 14.5;
+    $(section).css('font-size', 14.5);
+     $(section1).css('font-size', 19);
+     $(section2).css('font-size', 32.6);
+      $(section3).css('font-size', 24.6);
+    sessionStorage.count1=0;
+    return false;
+       }
+       if (sessionStorage.count == 3) {
+    var currentFontSize = $(section).css('font-size');
+    var currentFontSizeNum = parseFloat(currentFontSize, 10);
+    var newFontSize = 15;
+    $(section).css('font-size', 15);
+    $(section1).css('font-size', 19.5);
+    $(section2).css('font-size', 32.9);
+     $(section3).css('font-size', 24.9);
+    sessionStorage.count1=0;
+    return false;
+       }
+         if (sessionStorage.count == 4) {
+    var currentFontSize = $(section).css('font-size');
+    var currentFontSizeNum = parseFloat(currentFontSize, 10);
+    var newFontSize = 15.3;
+    $(section).css('font-size', 15.3);
+    $(section1).css('font-size', 20);
+    $(section2).css('font-size', 33.3);
+     $(section3).css('font-size', 25.2);
+    sessionStorage.count1=0;
+    return false;
+       }
+         if (sessionStorage.count == 5) {
+    var currentFontSize = $(section).css('font-size');
+    var currentFontSizeNum = parseFloat(currentFontSize, 10);
+    var newFontSize = 15.7;
+    $(section).css('font-size', 15.7);
+     $(section1).css('font-size', 20.5);
+     $(section2).css('font-size', 33.6);
+      $(section3).css('font-size', 25.5);
+    sessionStorage.count1=0;
+    return false;
+       }
+        if (sessionStorage.count == 6) {
+    var currentFontSize = $(section).css('font-size');
+    var currentFontSizeNum = parseFloat(currentFontSize, 10);
+    var newFontSize = 16;
+    $(section).css('font-size', 16);
+     $(section1).css('font-size', 21);
+     $(section2).css('font-size', 34);
+      $(section3).css('font-size', 25.8);
+    sessionStorage.count1=0;
+    return false;
+       }
+        if (sessionStorage.count1 == 1) {
+    var currentFontSize = $(section).css('font-size');
+    var currentFontSizeNum = parseFloat(currentFontSize, 10);
+    var newFontSize = 11;
+  $(section).css('font-size', 11.5);
+     $(section1).css('font-size', 15);
+     $(section2).css('font-size', 29);
+     $(section3).css('font-size', 20);
+    sessionStorage.count = 0;
+    return false;
+  }
+   if (sessionStorage.count1 == 2) {
+   var currentFontSize = $(section).css('font-size');
+    var currentFontSizeNum = parseFloat(currentFontSize, 10);
+    var newFontSize = 10.5;
+    $(section).css('font-size', 11);
+    $(section1).css('font-size', 14.5);
+     $(section2).css('font-size', 26);
+     $(section3).css('font-size', 19);
+    sessionStorage.count = 0;
+    return false;
+   }
+    if (sessionStorage.count1 == 3) {
+   var currentFontSize = $(section).css('font-size');
+    var currentFontSizeNum = parseFloat(currentFontSize, 10);
+    var newFontSize = 10;
+   $(section).css('font-size', 10);
+     $(section1).css('font-size', 13.5);
+     $(section2).css('font-size', 25);
+     $(section3).css('font-size', 18);
+    sessionStorage.count = 0;
+    return false;
+   }
+  });
+sessionStorage.setItem('count1',0);
+  // Decrease Font Size
+  $(".decreaseFont").on("click",function(){
+sessionStorage.setItem('count1',Number(sessionStorage.getItem('count1'))+1);
+  if (sessionStorage.count1 == 1) {
+    var currentFontSize = $(section).css('font-size');
+    var currentFontSizeNum = parseFloat(currentFontSize, 10);
+    var newFontSize = 11;
+  $(section).css('font-size', 11.5);
+     $(section1).css('font-size', 15);
+     $(section2).css('font-size', 29);
+     $(section3).css('font-size', 20);
+    sessionStorage.count = 0;
+    return false;
+  }
+   if (sessionStorage.count1 == 2) {
+   var currentFontSize = $(section).css('font-size');
+    var currentFontSizeNum = parseFloat(currentFontSize, 10);
+    var newFontSize = 10.5;
+    $(section).css('font-size', 11);
+    $(section1).css('font-size', 14.5);
+     $(section2).css('font-size', 26);
+     $(section3).css('font-size', 19);
+    sessionStorage.count = 0;
+    return false;
+   }
+    if (sessionStorage.count1 == 3) {
+   var currentFontSize = $(section).css('font-size');
+    var currentFontSizeNum = parseFloat(currentFontSize, 10);
+    var newFontSize = 10;
+   $(section).css('font-size', 10);
+     $(section1).css('font-size', 13.5);
+     $(section2).css('font-size', 25);
+     $(section3).css('font-size', 18);
+    sessionStorage.count = 0;
+    return false;
+   }
+  });
+    // Reset Font Size
+  var originalFontSize = $(section).css('font-size');
+  $(".resetFont").click(function(){
+    $(section).css('font-size', ''); 
+    $(section1).css('font-size','');
+    $(section2).css('font-size','');
+    $(section3).css('font-size','');
+    sessionStorage.count = 0;
+    sessionStorage.count1=0;
+  });
+  
+  
+  //tabs jquery
+ /* $(".content div").hide(); // Initially hide all content
+    $("#tabs_search li:first").attr("id","current"); // Activate first tab
+    $(".content div:first").fadeIn(); // Show first tab content
+    
+    $('#tabs_search a').click(function(e) {
+        e.preventDefault();
+        if ($(this).closest("li").attr("id") == "current"){ //detection for current tab
+         return       
+        }
+        else{             
+        $(".content div").hide(); //Hide all content
+        $("#tabs_search li").attr("id",""); //Reset id's
+        $(this).parent().attr("id","current"); // Activate this
+        $('#' + $(this).attr('name')).fadeIn(); // Show content for current tab
+        }
+    });*/
+  
+$('.FirstTab a').click(function (e) {
+                e.preventDefault();
+                $(".FirstTab").removeClass("srchCurrentETab");
+                $(".LastTabE").removeClass("srchCurrentPATab");
+                $(".FirstTab").addClass("srchCurrentETab");// Activate this
+                $("#sershow1").removeClass("inactivesrchCurrentETab");
+                $("#sershow2").removeClass("inactivesrchCurrentPATab");
+                $("#sershow1").removeClass("srchCurrentEInput");
+                $("#sershow2").removeClass("srchCurrentPAInput");
+                $("#sershow1").addClass("srchCurrentEInput");
+                $("#sershow2").addClass("inactivesrchCurrentPATab");
+                $('#' + $(this).attr('name')).fadeIn();// Show content for current tab
+            });
+            
+            $('.LastTabE a').click(function (e) {
+                e.preventDefault();
+                $(".FirstTab").removeClass("srchCurrentETab");
+                $(".LastTabE").removeClass("srchCurrentPATab");
+                $(".LastTabE").addClass("srchCurrentPATab");// Activate this
+                $("#sershow1").removeClass("inactivesrchCurrentETab");
+                $("#sershow2").removeClass("inactivesrchCurrentPATab");
+                $("#sershow1").removeClass("srchCurrentEInput");
+                $("#sershow2").removeClass("srchCurrentPAInput");
+                
+                $("#sershow2").addClass("srchCurrentPAInput");
+                $("#sershow1").addClass("inactivesrchCurrentETab");
+                $('#' + $(this).attr('name')).fadeIn();// Show content for current tab
+            });
+ 
+});
+
+
+//Mega menu js
+jQuery(function ($) {
+                                $("#grayclse").click(function () {
+                                    $("span.clse").hide();
+                                });
+                            });
+                            jQuery(function ($) {
+                                $("#oneEx").hover(function () {
+                                    $("span.clse").show();
+                                });
+                                $("#li1 a").focus(function () {
+                                    $("span.clse").show();
+                                });
+                            });
+                            jQuery(function ($) {
+                                $('span.clse').mouseleave(function () {
+                                    $("span.clse").hide();
+                                });
+                                 $('span.clse').focusout(function () {
+                                    $("span.clse").hide();
+                                });
+                            });
+                            jQuery(function ($) {
+                                $("#grayclse2").click(function () {
+                                    $("span.clse2").hide();
+                                });
+                            });
+                            jQuery(function ($) {
+                                $("#oneEx2").hover(function () {
+                                    $("span.clse2").show();
+                                });
+                                 $("#li2 a").focus(function () {
+                                    $("span.clse2").show();
+                                });
+                            });
+                            jQuery(function ($) {
+                                $('span.clse2').mouseleave(function () {
+                                    $("span.clse2").hide();
+                                });
+                                 $('span.clse2').focusout(function () {
+                                    $("span.clse2").hide();
+                                });
+                            });
+                            jQuery(function ($) {
+                                $("#grayclse3").click(function () {
+                                    $("span.clse3").hide();
+                                });
+                            });
+                            jQuery(function ($) {
+                                $("#oneEx3").hover(function () {
+                                    $("span.clse3").show();
+                                });
+                                 $("#li3 a").focus(function () {
+                                    $("span.clse3").show();
+                                });
+                            });
+                            jQuery(function ($) {
+                                $('span.clse3').mouseleave(function () {
+                                    $("span.clse3").hide();
+                                });
+                                 $('span.clse3').focusout(function () {
+                                    $("span.clse3").hide();
+                                });
+                            });
+                            jQuery(function ($) {
+                                $('#li1').mouseleave(function () {
+                                    $("span.clse").hide();
+                                });
+                            });
+                            jQuery(function ($) {
+                                $('#li2').mouseleave(function () {
+                                    $("span.clse2").hide();
+                                });
+                            });
+                            jQuery(function ($) {
+                                $('#li3').mouseleave(function () {
+                                    $("span.clse3").hide();
+                                });
+                            });
